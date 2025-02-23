@@ -36,7 +36,7 @@ function init() {
         alpha: true,  // allow transparency so CSS shows through
         antialias: true
     });
-    renderer.setClearColor('#F8F8FF', 1); // transparent clear color
+    renderer.setClearColor('#F5F5F5', 1); // transparent clear color
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -105,7 +105,7 @@ function init() {
 
     lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(lineVertices, 3));
     const lineMaterial = new THREE.LineBasicMaterial({
-        color: '#483D8B',
+        color: '#F5F5F5',
         transparent: true,
         opacity: 0.001, // fine, subtle connections
         linewidth: 1, // line width
