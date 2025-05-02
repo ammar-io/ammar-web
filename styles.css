@@ -16,11 +16,11 @@ body {
 
 
 /* Header styling: placed top left */
-.header {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 1;
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 } 
 
 /* Arrange header content horizontally */
@@ -29,11 +29,13 @@ body {
     align-items: center;
 }
 
-.header-content h1 {
-    margin: 0;
-    margin-right: 30px;
-    font-size: 16px;
+h1 {
+  margin: 0;
+  font-size: 16px;
+  text-align: center;
 }
+
+
 
 
 .header-content h2 {
@@ -42,6 +44,12 @@ body {
     margin-left: 20px;
     font-size: 16px;
     color: #333;
+}
+
+.header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
 
 
@@ -100,16 +108,29 @@ body {
     color: #555;
 }
 /* Styling for social links */
-
 .social-links {
     display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 10px;
+    gap: 8px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
-.social-links a {
-    color: #333;
+.social-links svg {
+    width: 24px;
+    height: 24px;
+    fill: #333;
+
+}
+
+/* Style for the anchor elements */
+.social-link-item {
+  color: #333;
+  text-decoration: none; /* Remove underline */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
     transition: color 0.3s;
 }
 
