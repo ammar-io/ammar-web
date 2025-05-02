@@ -1,4 +1,3 @@
-// Project Data
 const projects = [
   {
     title: "Project 1",
@@ -23,63 +22,59 @@ const projects = [
   },
 ];
 
-// Render Projects
 function renderProjects() {
   const projectsContainer = document.getElementById("projects-container");
-  if (projectsContainer) {
-    projects.forEach((project) => {
-      const card = document.createElement("div");
-      card.classList.add("project-card");
+  projects.forEach((project) => {
+    const card = document.createElement("div");
+    card.classList.add("project-card");
 
-      const titleLink = document.createElement("a");
-      titleLink.href = project.url;
-      titleLink.classList.add("project-title");
-      titleLink.textContent = project.title;
-      card.appendChild(titleLink);
+    const titleLink = document.createElement("a");
+    titleLink.href = project.url;
+    titleLink.classList.add("project-title");
+    titleLink.textContent = project.title;
+    card.appendChild(titleLink);
 
-      const statusBadge = document.createElement("span");
-      statusBadge.classList.add("status-badge");
-      statusBadge.textContent = project.status;
-      card.appendChild(statusBadge);
+    const statusBadge = document.createElement("span");
+    statusBadge.classList.add("status-badge");
+    statusBadge.textContent = project.status;
+    card.appendChild(statusBadge);
 
-      const categoryTag = document.createElement("span");
-      categoryTag.classList.add("category-tag");
-      categoryTag.textContent = project.category;
-      card.appendChild(categoryTag);
+    const categoryTag = document.createElement("span");
+    categoryTag.classList.add("category-tag");
+    categoryTag.textContent = project.category;
+    card.appendChild(categoryTag);
 
-      const description = document.createElement("p");
-      description.classList.add("project-description");
-      description.textContent = project.description;
-      card.appendChild(description);
+    const description = document.createElement("p");
+    description.classList.add("project-description");
+    description.textContent = project.description;
+    card.appendChild(description);
 
-      const externalLink = document.createElement("a");
-      externalLink.href = project.url;
-      externalLink.classList.add("external-link");
-      externalLink.textContent = "↗"; // Placeholder icon, can be replaced with SVG
-      card.appendChild(externalLink);
+    const externalLink = document.createElement("a");
+    externalLink.href = project.url;
+    externalLink.classList.add("external-link");
+    externalLink.textContent = "↗";
+    card.appendChild(externalLink);
 
-      projectsContainer.appendChild(card);
-    });
-  }
+    projectsContainer.appendChild(card);
+  });
 }
 
-// Footer Socials
-function renderSocials() {
-  const socialLinks = [
-    { href: "https://github.com/ammar-io", icon: "github" }, // Replace 'github' with appropriate SVG or icon class
-    { href: "https://www.linkedin.com/in/ammar-io/", icon: "linkedin" }, // Replace 'linkedin' with appropriate SVG or icon class
-    { href: "https://www.ammaralt.com", icon: "personal" }, // Replace 'personal' with appropriate SVG or icon class
-  ];
+const socialLinks = [
+  { href: "https://github.com/ammar-io", name: "GitHub" },
+  { href: "https://www.linkedin.com/in/ammar-io/", name: "LinkedIn" },
+  { href: "https://www.ammaralt.com", name: "Personal Website" },
+];
 
-  const socialsContainer = document.querySelector(".social-links");
-  if (socialsContainer) {
+function renderSocials() {
+  const socialContainers = document.querySelectorAll(".social-links");
+  socialContainers.forEach((socialsContainer) => {
     socialLinks.forEach((link) => {
       const linkElement = document.createElement("a");
       linkElement.href = link.href;
-      linkElement.innerHTML = `<svg></svg>`; // Add your SVG icon here or use a class name for an icon font
+      linkElement.textContent = link.name;
       socialsContainer.appendChild(linkElement);
     });
-  }
+  });
 }
 
 renderProjects();
