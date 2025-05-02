@@ -98,25 +98,83 @@ function init() {
     const lineGeometry = new THREE.BufferGeometry();
     const lineVertices = [];
     
-    // Reduce the number of connections for cleaner look
-    const MAX_CONNECTIONS = 1500; // Limit to prevent too many lines
+    // Track which nodes have connections
+    const connectedNodes = new Set();
+    
+    // Parameters for connections
+    const MAX_CONNECTIONS = 2000; // Increased for better connectivity
+    const MIN_DISTANCE = 2;
+    const MAX_DISTANCE = 6;
     let connectionCount = 0;
     
+    // First pass: create randomized connections
     for (let i = 0; i < vertices.length; i += 3) {
         if (connectionCount >= MAX_CONNECTIONS) break;
         
-        for (let j = i + 3; j < vertices.length; j += 3) {
+        // Number of connections for this node (1-3)
+        const numConnections = Math.floor(Math.random() * 3) + 1;
+        let nodeConnections = 0;
+        
+        // Try to create the desired number of connections
+        for (let attempt = 0; attempt < 10 && nodeConnections < numConnections; attempt++) {
+            // Pick a random node to connect to
+            const j = Math.floor(Math.random() * (vertices.length / 3)) * 3;
+            
+            // Skip self-connections
+            if (i === j) continue;
+            
             const dx = vertices[i] - vertices[j];
             const dy = vertices[i + 1] - vertices[j + 1];
             const dz = vertices[i + 2] - vertices[j + 2];
             const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-            if (distance > 2 && distance < 6) {
+            
+            if (distance > MIN_DISTANCE && distance < MAX_DISTANCE) {
                 lineVertices.push(vertices[i], vertices[i + 1], vertices[i + 2]);
                 lineVertices.push(vertices[j], vertices[j + 1], vertices[j + 2]);
                 connectionCount++;
+                nodeConnections++;
+                
+                // Mark both nodes as connected
+                connectedNodes.add(Math.floor(i/3));
+                connectedNodes.add(Math.floor(j/3));
                 
                 if (connectionCount >= MAX_CONNECTIONS) break;
+            }
+        }
+    }
+    
+    // Second pass: ensure each node has at least one connection
+    for (let i = 0; i < vertices.length / 3; i++) {
+        if (!connectedNodes.has(i) && connectionCount < MAX_CONNECTIONS) {
+            // Find the nearest node to connect to
+            let minDistance = Infinity;
+            let nearestNode = -1;
+            
+            const baseIndex = i * 3;
+            for (let j = 0; j < vertices.length / 3; j++) {
+                if (i === j) continue;
+                
+                const targetIndex = j * 3;
+                const dx = vertices[baseIndex] - vertices[targetIndex];
+                const dy = vertices[baseIndex + 1] - vertices[targetIndex + 1];
+                const dz = vertices[baseIndex + 2] - vertices[targetIndex + 2];
+                const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                
+                if (distance < minDistance && distance > MIN_DISTANCE) {
+                    minDistance = distance;
+                    nearestNode = j;
+                }
+            }
+            
+            if (nearestNode >= 0) {
+                const targetIndex = nearestNode * 3;
+                lineVertices.push(
+                    vertices[baseIndex], vertices[baseIndex + 1], vertices[baseIndex + 2],
+                    vertices[targetIndex], vertices[targetIndex + 1], vertices[targetIndex + 2]
+                );
+                connectionCount++;
+                connectedNodes.add(i);
+                connectedNodes.add(nearestNode);
             }
         }
     }
