@@ -1,171 +1,86 @@
-let scene, camera, renderer;
-let brain;
-let mouseX = 0, mouseY = 0;
-let windowHalfX = window.innerWidth / 2;
-let windowHalfY = window.innerHeight / 2;
+// Project Data
+const projects = [
+  {
+    title: "Project 1",
+    status: "Completed",
+    category: "Personal",
+    description: "Description for Project 1.",
+    url: "https://www.example.com/project1",
+  },
+  {
+    title: "Project 2",
+    status: "Prototyped",
+    category: "Club Project",
+    description: "Description for Project 2.",
+    url: "https://www.example.com/project2",
+  },
+  {
+    title: "Project 3",
+    status: "In Progress",
+    category: "Internship",
+    description: "Description for Project 3.",
+    url: "https://www.example.com/project3",
+  },
+];
 
-// Create circle texture for points
-function createCircleTexture() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 32;
-    canvas.height = 32;
-    const ctx = canvas.getContext('2d');
+// Render Projects
+function renderProjects() {
+  const projectsContainer = document.getElementById("projects-container");
+  if (projectsContainer) {
+    projects.forEach((project) => {
+      const card = document.createElement("div");
+      card.classList.add("project-card");
 
-    // Draw a soft circle with a gradient
-    const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-    gradient.addColorStop(0, 'rgba(255,255,255,1)');
-    gradient.addColorStop(0.5, 'rgba(255,255,255,0.8)');
-    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      const titleLink = document.createElement("a");
+      titleLink.href = project.url;
+      titleLink.classList.add("project-title");
+      titleLink.textContent = project.title;
+      card.appendChild(titleLink);
 
-    ctx.beginPath();
-    ctx.arc(16, 16, 16, 0, Math.PI * 2);
-    ctx.fillStyle = gradient;
-    ctx.fill();
+      const statusBadge = document.createElement("span");
+      statusBadge.classList.add("status-badge");
+      statusBadge.textContent = project.status;
+      card.appendChild(statusBadge);
 
-    return new THREE.CanvasTexture(canvas);
-}
+      const categoryTag = document.createElement("span");
+      categoryTag.classList.add("category-tag");
+      categoryTag.textContent = project.category;
+      card.appendChild(categoryTag);
 
-// Initialize the scene
-function init() {
-    // Scene setup
-    scene = new THREE.Scene();
+      const description = document.createElement("p");
+      description.classList.add("project-description");
+      description.textContent = project.description;
+      card.appendChild(description);
 
-    // Set a dark background (like on hys-inc.jp)
-    renderer = new THREE.WebGLRenderer({ 
-        canvas: document.querySelector('#canvas'),
-        alpha: true,  // allow transparency so CSS shows through
-        antialias: true
+      const externalLink = document.createElement("a");
+      externalLink.href = project.url;
+      externalLink.classList.add("external-link");
+      externalLink.textContent = "↗"; // Placeholder icon, can be replaced with SVG
+      card.appendChild(externalLink);
+
+      projectsContainer.appendChild(card);
     });
-    renderer.setClearColor('#F5F5F5', 1); // transparent clear color
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+  }
+}
 
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+// Footer Socials
+function renderSocials() {
+  const socialLinks = [
+    { href: "https://github.com/ammar-io", icon: "github" }, // Replace 'github' with appropriate SVG or icon class
+    { href: "https://www.linkedin.com/in/ammar-io/", icon: "linkedin" }, // Replace 'linkedin' with appropriate SVG or icon class
+    { href: "https://www.ammaralt.com", icon: "personal" }, // Replace 'personal' with appropriate SVG or icon class
+  ];
 
-    // Create brain-like geometry
-    const geometry = new THREE.BufferGeometry();
-    const vertices = [];
-    const radius = 9; // Base radius for the brain shape
-
-    // Shape parameters
-    const NUM_POINTS = 2000;
-
-    // Create sphere geometry points
-    for (let i = 0; i < NUM_POINTS; i++) {
-        const theta = Math.random() * 2 * Math.PI;
-        // Use random cosine for uniform distribution on a sphere
-        const phi = Math.acos(2 * Math.random() - 1);
-
-        const x = radius * Math.sin(phi) * Math.cos(theta);
-        const y = radius * Math.sin(phi) * Math.sin(theta);
-        const z = radius * Math.cos(phi);
-
-        vertices.push(x, y, z);
-    }
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-
-    // After setting attributes on geometry, store a copy of the original positions:
-    geometry.userData.originalPositions = geometry.attributes.position.array.slice();
-
-    // Create circle texture (using a soft white circle)
-    const circleTexture = createCircleTexture();
-
-    // Use white points to contrast against the dark background
-    const pointMaterial = new THREE.PointsMaterial({
-        map: circleTexture,
-        alphaTest: 0.5,
-        color: '#483D8B', // dots colors 
-        size: 0.08, // reduced dot size
-        transparent: true,
-        opacity: 0.9,
-        sizeAttenuation: true,
-        depthWrite: false
+  const socialsContainer = document.querySelector(".social-links");
+  if (socialsContainer) {
+    socialLinks.forEach((link) => {
+      const linkElement = document.createElement("a");
+      linkElement.href = link.href;
+      linkElement.innerHTML = `<svg></svg>`; // Add your SVG icon here or use a class name for an icon font
+      socialsContainer.appendChild(linkElement);
     });
-
-    brain = new THREE.Points(geometry, pointMaterial);
-    scene.add(brain);
-
-    // Create connections between points with subtle white lines
-    const lineGeometry = new THREE.BufferGeometry();
-    const lineVertices = [];
-    
-    for (let i = 0; i < vertices.length; i += 3) {
-        for (let j = i + 3; j < vertices.length; j += 3) {
-            const dx = vertices[i] - vertices[j];
-            const dy = vertices[i + 1] - vertices[j + 1];
-            const dz = vertices[i + 2] - vertices[j + 2];
-            const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-            if (distance > 4 && distance < 7) {
-                lineVertices.push(vertices[i], vertices[i + 1], vertices[i + 2]);
-                lineVertices.push(vertices[j], vertices[j + 1], vertices[j + 2]);
-            }
-        }
-    }
-
-    lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(lineVertices, 3));
-    const lineMaterial = new THREE.LineBasicMaterial({
-        color: '#F5F5F5',
-        transparent: true,
-        opacity: 0.001, // fine, subtle connections
-        linewidth: 1, // line width
-    });
-    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-    scene.add(lines);
-
-    // Adjust camera position
-    camera.position.z = 15;
-
-    // Event listeners
-    document.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('resize', onWindowResize);
+  }
 }
 
-// Handle mouse movement
-function onMouseMove(event) {
-    mouseX = (event.clientX - windowHalfX) * 0.005;
-    mouseY = (event.clientY - windowHalfY) * 0.005;
-}
-
-// Handle window resize
-function onWindowResize() {
-    windowHalfX = window.innerWidth / 2;
-    windowHalfY = window.innerHeight / 2;
-    
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-// Animation loop
-function animate() {
-    requestAnimationFrame(animate);
-
-    // Determine dominant mouse movement direction
-    if (Math.abs(mouseX) > Math.abs(mouseY)) {
-        brain.rotation.y -= mouseX * 0.01;
-    } else {
-        brain.rotation.x -= mouseY * 0.01;
-    }
-
-    // Subtle pulsing effect remains as is
-    const scale = 1 + Math.sin(Date.now() * 0.002) * 0.05;
-    brain.scale.set(scale, scale, scale);
-
-    // Shake effect: displace each vertex based on its original position
-    const shakeAmplitude = 0.025; // adjust the amplitude of the shake as needed
-    const positions = brain.geometry.attributes.position.array ;
-    const originalPositions = brain.geometry.userData.originalPositions;
-    const time = Date.now() * 0.005;
-    for (let i = 0; i < positions.length; i++) {
-        // Use sin and cos for periodic, index-based disturbance
-        positions[i] = originalPositions[i] + shakeAmplitude * Math.sin(time + i);
-    }
-    brain.geometry.attributes.position.needsUpdate = true;
-
-    renderer.render(scene, camera);
-}
-
-// Start the application
-init();
-animate();
+renderProjects();
+renderSocials();
