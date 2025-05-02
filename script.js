@@ -29,14 +29,23 @@ function createCircleTexture() {
 function init() {
     // Scene setup
     scene = new THREE.Scene();
+    
+    // Canvas element
+    const canvas = document.querySelector('#canvas');
+    
+    // Check if canvas exists
+    if (!canvas) {
+        console.error("Canvas element not found!");
+        return;
+    }
 
     // Set a dark background (like on hys-inc.jp)
     renderer = new THREE.WebGLRenderer({ 
-        canvas: document.querySelector('#canvas'),
+        canvas: canvas,
         alpha: true,  // allow transparency so CSS shows through
         antialias: true
     });
-    renderer.setClearColor('#F5F5F5', 1); // transparent clear color
+    renderer.setClearColor('#F5F5F5', 1); // Set to match background color
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -45,7 +54,7 @@ function init() {
     // Create brain-like geometry
     const geometry = new THREE.BufferGeometry();
     const vertices = [];
-    const radius = 9; // Base radius for the brain shape
+    const radius = 5; // Slightly smaller for better proportion
 
     // Shape parameters
     const NUM_POINTS = 2000;
@@ -70,14 +79,14 @@ function init() {
     // Create circle texture (using a soft white circle)
     const circleTexture = createCircleTexture();
 
-    // Use white points to contrast against the dark background
+    // Use subtle points to match the minimalist aesthetic
     const pointMaterial = new THREE.PointsMaterial({
         map: circleTexture,
         alphaTest: 0.5,
-        color: '#483D8B', // dots colors 
-        size: 0.08, // reduced dot size
+        color: '#483D8B', // Keep the dark purple for dots
+        size: 0.06, // smaller dots for cleaner look
         transparent: true,
-        opacity: 0.9,
+        opacity: 0.8,
         sizeAttenuation: true,
         depthWrite: false
     });
@@ -85,36 +94,45 @@ function init() {
     brain = new THREE.Points(geometry, pointMaterial);
     scene.add(brain);
 
-    // Create connections between points with subtle white lines
+    // Create connections between points with subtle lines
     const lineGeometry = new THREE.BufferGeometry();
     const lineVertices = [];
     
+    // Reduce the number of connections for cleaner look
+    const MAX_CONNECTIONS = 1500; // Limit to prevent too many lines
+    let connectionCount = 0;
+    
     for (let i = 0; i < vertices.length; i += 3) {
+        if (connectionCount >= MAX_CONNECTIONS) break;
+        
         for (let j = i + 3; j < vertices.length; j += 3) {
             const dx = vertices[i] - vertices[j];
             const dy = vertices[i + 1] - vertices[j + 1];
             const dz = vertices[i + 2] - vertices[j + 2];
             const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-            if (distance > 4 && distance < 7) {
+            if (distance > 2 && distance < 6) {
                 lineVertices.push(vertices[i], vertices[i + 1], vertices[i + 2]);
                 lineVertices.push(vertices[j], vertices[j + 1], vertices[j + 2]);
+                connectionCount++;
+                
+                if (connectionCount >= MAX_CONNECTIONS) break;
             }
         }
     }
 
     lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(lineVertices, 3));
     const lineMaterial = new THREE.LineBasicMaterial({
-        color: '#F5F5F5',
+        color: '#483D8B',
         transparent: true,
-        opacity: 0.001, // fine, subtle connections
-        linewidth: 1, // line width
+        opacity: 0.05, // very subtle connections
+        linewidth: 1,
     });
     const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
     scene.add(lines);
 
-    // Adjust camera position
-    camera.position.z = 15;
+    // Position camera
+    camera.position.z = 12;
 
     // Event listeners
     document.addEventListener('mousemove', onMouseMove);
@@ -123,8 +141,8 @@ function init() {
 
 // Handle mouse movement
 function onMouseMove(event) {
-    mouseX = (event.clientX - windowHalfX) * 0.005;
-    mouseY = (event.clientY - windowHalfY) * 0.005;
+    mouseX = (event.clientX - windowHalfX) * 0.003; // Reduced sensitivity
+    mouseY = (event.clientY - windowHalfY) * 0.003;
 }
 
 // Handle window resize
@@ -141,34 +159,30 @@ function onWindowResize() {
 function animate() {
     requestAnimationFrame(animate);
 
-    // Determine dominant mouse movement direction
-    if (Math.abs(mouseX) > Math.abs(mouseY)) {
-        brain.rotation.y -= mouseX * 0.01;
-    } else {
-        brain.rotation.x -= mouseY * 0.01;
+    // Smoother rotation based on mouse movement
+    if (brain) {
+        brain.rotation.y += (mouseX - brain.rotation.y) * 0.05;
+        brain.rotation.x += (mouseY - brain.rotation.x) * 0.05;
+        
+        // Subtle pulsing effect
+        const scale = 1 + Math.sin(Date.now() * 0.001) * 0.03; // More subtle pulse
+        brain.scale.set(scale, scale, scale);
+
+        // Subtle shake effect
+        const shakeAmplitude = 0.015; // Reduced amplitude
+        const positions = brain.geometry.attributes.position.array;
+        const originalPositions = brain.geometry.userData.originalPositions;
+        const time = Date.now() * 0.003;
+        for (let i = 0; i < positions.length; i++) {
+            positions[i] = originalPositions[i] + shakeAmplitude * Math.sin(time + i * 0.1);
+        }
+        brain.geometry.attributes.position.needsUpdate = true;
     }
 
-    // Subtle pulsing effect remains as is
-    const scale = 1 + Math.sin(Date.now() * 0.002) * 0.05;
-    brain.scale.set(scale, scale, scale);
-
-    // Shake effect: displace each vertex based on its original position
-    const shakeAmplitude = 0.025; // adjust the amplitude of the shake as needed
-    const positions = brain.geometry.attributes.position.array;
-    const originalPositions = brain.geometry.userData.originalPositions;
-    const time = Date.now() * 0.005;
-    for (let i = 0; i < positions.length; i++) {
-        // Use sin and cos for periodic, index-based disturbance
-        positions[i] = originalPositions[i] + shakeAmplitude * Math.sin(time + i);
+    if (renderer && scene && camera) {
+        renderer.render(scene, camera);
     }
-    brain.geometry.attributes.position.needsUpdate = true;
-
-    renderer.render(scene, camera);
 }
-
-// Start the application
-init();
-animate();
 
 // Project Data
 const projects = [
@@ -198,6 +212,8 @@ const projects = [
 // Render projects to the DOM
 function renderProjects() {
   const projectsContainer = document.getElementById("projects-container");
+  if (!projectsContainer) return;
+  
   projects.forEach((project) => {
     const card = document.createElement("div");
     card.classList.add("project-card");
@@ -264,8 +280,18 @@ function renderSocials() {
   });
 }
 
-// Wait for DOM to be fully loaded before rendering
+// Wait for DOM to be fully loaded before running
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize the 3D brain visualization
+  try {
+    init();
+    animate();
+    console.log("3D visualization initialized");
+  } catch (e) {
+    console.error("Error initializing 3D visualization:", e);
+  }
+  
+  // Render projects and social links
   renderProjects();
   renderSocials();
 });
