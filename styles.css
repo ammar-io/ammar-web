@@ -189,6 +189,8 @@ main p {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  position: relative;
+  padding-top: 25px;
 }
 
 .project-card:hover {
@@ -202,6 +204,8 @@ main p {
   color: #333;
   text-decoration: none;
   transition: color 0.3s ease;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .project-title:hover {
@@ -231,6 +235,8 @@ main p {
   letter-spacing: 1px;
   color: #888;
   margin-bottom: 12px;
+  display: inline-block;
+  margin-top: 5px;
 }
 
 .project-description {
@@ -253,6 +259,61 @@ main p {
 .external-link:hover {
   color: #000;
 }
+/* Base status badge styling */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white; /* Changed text color to white for better contrast */
+    background-color: #888; /* Default gray color */
+    margin-right: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Status colors */
+  .status-blue {
+    background-color: #ebdada; /* Google Blue */
+  }
+  
+  .status-green {
+    background-color: #8caba8; /* Google Green */
+  }
+  
+  .status-yellow {
+    background-color: #FBBC05; /* Google Yellow */
+    color: #333; /* Darker text for better readability on yellow */
+  }
+  
+  .status-red {
+    background-color: #EA4335; /* Google Red */
+  }
+  
+  .status-purple {
+    background-color: #a2798f; /* Purple */
+  }
+  
+  .status-orange {
+    background-color: #F39C12; /* Orange */
+  }
+  
+  .status-teal {
+    background-color: #16A085; /* Teal */
+  }
+  
+  .status-pink {
+    background-color: #E91E63; /* Pink */
+  }
+  
+  /* Status badge hover effect */
+  .status-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  }
+  
 
 /* Resume Page Styles */
 .resume-download {
@@ -362,5 +423,66 @@ main p {
   
   .footer a {
     font-size: 12px;
+  }
+
+.resume-download {
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Added gap between buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  }
+  
+  .download-button, .view-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .download-button {
+    background-color: #483D8B;
+    color: white;
+  }
+  
+  .view-button {
+    background-color: #555;
+    color: white;
+  }
+  
+  .download-button:hover, .view-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .download-button:hover {
+    background-color: #372A79;
+  }
+  
+  .view-button:hover {
+    background-color: #444;
+  }
+  
+  .download-icon, .view-icon {
+    font-size: 18px;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 480px) {
+    .resume-download {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .download-button, .view-button {
+      width: 100%;
+      max-width: 240px;
+    }
   }
 }

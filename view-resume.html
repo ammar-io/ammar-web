@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Resume | Ammar Ali</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional styles specific to the resume view page */
+        body {
+            background-color: #f9f9f9;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .resume-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 80px;
+            margin-bottom: 80px;
+        }
+        
+        .resume-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .resume-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .resume-header p {
+            color: #555;
+            margin-bottom: 8px;
+        }
+        
+        .resume-section {
+            margin-bottom: 30px;
+        }
+        
+        .resume-section h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            color: #483D8B;
+        }
+        
+        .resume-item {
+            margin-bottom: 20px;
+        }
+        
+        .resume-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .resume-item-title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .resume-item-subtitle {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .resume-item-date {
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .resume-item-description {
+            margin-left: 20px;
+        }
+        
+        .resume-item-description li {
+            margin-bottom: 5px;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #483D8B;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background-color: #372A79;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .download-corner {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        
+        @media print {
+            .back-button, .download-corner {
+                display: none;
+            }
+            
+            .resume-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .resume-container {
+                padding: 20px;
+                margin-top: 60px;
+            }
+            
+            .resume-item-header {
+                flex-direction: column;
+            }
+            
+            .resume-item-date {
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="resume.html" class="back-button">← Back</a>
+    
+    <div class="download-corner">
+        <a href="assets/Ammar_Ali_2025.pdf" download class="download-button">
+            <span class="download-icon">↓</span>
+            <span>Download PDF</span>
+        </a>
+    </div>
+
+    <div class="resume-container">
+        <div class="resume-header">
+            <h1>Ammar Ali</h1>
+            <p>Software Engineer | Brain & Cognitive Science</p>
+            <p>aali02@illinois.edu | github.com/ammar-io | linkedin.com/in/aali02</p>
+        </div>
+
+        <div class="resume-section">
+            <h2>Education</h2>
+            <div class="resume-item">
+                <div class="resume-item-header">
+                    <div>
+                        <div class="resume-item-title">University of Illinois at Urbana-Champaign</div>
+                        <div class="resume-item-subtitle">BS in Brain & Cognitive Science</div>
+                    </div>
+                    <div class="resume-item-date">Expected Graduation: May 2025</div>
+                </div>
+                <ul class="resume-item-description">
+                    <li>Relevant Coursework: Neural Networks, Machine Learning, Computational Neuroscience, Human-Computer Interaction</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="resume-section">
+            <h2>Experience</h2>
+            <div class="resume-item">
+                <div class="resume-item-header">
+                    <div>
+                        <div class="resume-item-title">Software Engineer</div>
+                        <div class="resume-item-subtitle">Disruption Lab, Gies College of Business</div>
+                    </div>
+                    <div class="resume-item-date">August 2024 - Present</div>
+                </div>
+                <ul class="resume-item-description">
+                    <li>Developed an OpenAI-powered chatbot for enhancing student learning experiences</li>
+                    <li>Implemented prompt engineering techniques to optimize AI responses</li>
+                    <li>Created user interface components using React.js and Tailwind CSS</li>
+                </ul>
+            </div>
+
+            <div class="resume-item">
+                <div class="resume-item-header">
+                    <div>
+                        <div class="resume-item-title">Machine Learning Engineering Intern</div>
+                        <div class="resume-item-subtitle">University of Illinois at Urbana-Champaign</div>
+                    </div>
+                    <div class="resume-item-date">May 2024 - August 2024</div>
+                </div>
+                <ul class="resume-item-description">
+                    <li>Trained YOLO-V8 object detection models to identify recyclable materials</li>
+                    <li>Implemented computer vision solutions for campus waste management systems</li>
+                    <li>Optimized model performance for real-time recognition on edge devices</li>
+                </ul>
+            </div>
+
+            <div class="resume-item">
+                <div class="resume-item-header">
+                    <div>
+                        <div class="resume-item-title">Field Data Engineering Intern</div>
+                        <div class="resume-item-subtitle">SpotGenius</div>
+                    </div>
+                    <div class="resume-item-date">January 2024 - May 2024</div>
+                </div>
+                <ul class="resume-item-description">
+                    <li>Worked on License Plate Recognition (LPR) systems for smart parking solutions</li>
+                    <li>Developed data processing pipelines for real-time vehicle identification</li>
+                    <li>Conducted field testing and optimization of recognition accuracy</li>
+                </ul>
+            </div>
+
+            <div class="resume-item">
+                <div class="resume-item-header">
+                    <div>
+                        <div class="resume-item-title">Project Manager</div>
+                        <div class="resume-item-subtitle">Neurotech UIUC</div>
+                    </div>
+                    <div class="resume-item-date">August 2023 - May 2024</div>
+                </div>
+                <ul class="resume-item-description">
+                    <li>Led development of a VR-Neurofeedback system combining EEG signals with virtual reality</li>
+                    <li>Coordinated cross-functional team of engineers, designers, and neuroscience students</li>
+                    <li>Implemented dynamic visual feedback elements for cognitive therapy applications</li>
+                </ul>
+            </div>
+
+            <div class="resume-item">
+                <div class="resume-item-header">
+                    <div>
+                        <div class="resume-item-title">Software Development Director</div>
+                        <div class="resume-item-subtitle">Illini VEX Robotics</div>
+                    </div>
+                    <div class="resume-item-date">August 2022 - May 2023</div>
+                </div>
+                <ul class="resume-item-description">
+                    <li>Oversaw software development for competition robotics platforms</li>
+                    <li>Implemented control systems using C++ for autonomous operation</li>
+                    <li>Mentored junior team members in programming best practices</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="resume-section">
+            <h2>Skills</h2>
+            <div class="resume-item">
+                <ul class="resume-item-description">
+                    <li><strong>Programming Languages:</strong> Python, JavaScript, C++, MATLAB</li>
+                    <li><strong>Frameworks & Libraries:</strong> PyTorch, TensorFlow, React.js, Three.js, OpenCV</li>
+                    <li><strong>Tools & Technologies:</strong> Git, Docker, AWS, Unity3D</li>
+                    <li><strong>Domain Knowledge:</strong> Machine Learning, Computer Vision, Neuroscience, Brain-Computer Interfaces</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="resume-section">
+            <h2>Projects</h2>
+            <div class="resume-item">
+                <div class="resume-item-header">
+                    <div>
+                        <div class="resume-item-title">MindBridge</div>
+                    </div>
+                </div>
+                <ul class="resume-item-description">
+                    <li>Developed VR application using Unity and C# that processes EEG signals for real-time emotional state detection</li>
+                    <li>Created closed-loop cognitive therapy experience for improving attentional control</li>
+                </ul>
+            </div>
+
+            <div class="resume-item">
+                <div class="resume-item-header">
+                    <div>
+                        <div class="resume-item-title">Blockchain Auditing System</div>
+                    </div>
+                </div>
+                <ul class="resume-item-description">
+                    <li>Implemented zero-knowledge proofs for digital asset validation and analysis</li>
+                    <li>Built with Python, Circom & JavaScript (Snark.js)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
