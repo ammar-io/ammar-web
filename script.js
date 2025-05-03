@@ -258,7 +258,7 @@ const projects = [
       statusColor: "green", // Added color information
       category: "Personal",
       description: "Using Kalman Filter for cursor prediction and viewing with OpenCV",
-      url: "https://www.example.com/project2",
+      url: "https://github.com/ammar-io/kalman-cursor",
     },
     {
       title: "Recycling Detection Bins",
@@ -266,7 +266,7 @@ const projects = [
       statusColor: "purple", // Added color information
       category: "Internship Project",
       description: "Trained YOLO-V8 computer vision models to detect and allow recyclable materials to enter waste bins for the UIUC campus",
-      url: "https://www.example.com/project3",
+      url: "https://github.com/ammar-io/RRR",
     },
     {
       title: "Blockchain Auditing System",
