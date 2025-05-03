@@ -245,24 +245,31 @@ function animate() {
 // Project Data
 const projects = [
   {
-    title: "Project 1",
-    status: "Completed",
+    title: "MindBridge",
+    status: "Prototyping",
     category: "Personal",
-    description: "Description for Project 1.",
+    description: "MindBridge uses EEG signals for real-time emotional state detection. Integrated VR using C# & Unity, via UDP. Dynamically adjusts visual feedback elements for a closed-loop cognitive therapy experience, improving the user's attentional control.",
     url: "https://www.example.com/project1",
   },
   {
-    title: "Project 2",
-    status: "Prototyped",
-    category: "Club Project",
-    description: "Description for Project 2.",
+    title: "Kalman Filter Cursor Tracker ",
+    status: "Developing",
+    category: "Personal",
+    description: "Using Kalman Filter for cursor prediction and viewing with OpenCV",
     url: "https://www.example.com/project2",
   },
   {
-    title: "Project 3",
-    status: "In Progress",
-    category: "Internship",
-    description: "Description for Project 3.",
+    title: "Recycling Detection Bins",
+    status: "Prototyped",
+    category: "Internship Project",
+    description: "Trained YOLO-V8 computer vision models to detect and allow recyclable materials to enter waste bins for the UIUC campus",
+    url: "https://www.example.com/project3",
+  },
+  {
+    title: "Blockchain Auditing System",
+    status: "Prototyped",
+    category: "Research",
+    description: "Used ZKP's to develop a SOTA blockchain auditing system for faster digital asset validation and analysis. Built with Python, Circom & JavaScript (Snark.js). ",
     url: "https://www.example.com/project3",
   },
 ];
