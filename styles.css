@@ -47,20 +47,25 @@ body {
 
 .main-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  flex-direction: column;
+  text-decoration: none;
 }
-
+.main-header h1 a {
+    text-decoration: none;
+    color: inherit;     /* inherit your h1 color */
+  }
 h1 {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   letter-spacing: 0.5px;
 }
 
 .header-content h2 {
   margin: 0;
-  margin-left: 15px;
-  font-size: 16px;
+  margin-left: 0px;
+  font-size: 14px;
   color: #555;
   font-weight: normal;
 }
