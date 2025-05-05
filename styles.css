@@ -319,7 +319,12 @@ main p {
   .status-blue {
     background-color: #ebdada; /* Google Blue */
   }
-  
+  .status-babyblue {
+    background-color: #E6F6FA; /* Google Blue */
+  }
+  .status-cyan {
+    background-color: #C5DCE6; /* Google Blue */
+  }
   .status-green {
     background-color: #8caba8; /* Google Green */
   }
@@ -336,7 +341,9 @@ main p {
   .status-purple {
     background-color: #a2798f; /* Purple */
   }
-  
+  .status-lilpurple {
+    background-color: #DAC5E6; /* Purple */
+  }
   .status-orange {
     background-color: #F39C12; /* Orange */
   }
@@ -348,7 +355,9 @@ main p {
   .status-pink {
     background-color: #E91E63; /* Pink */
   }
-  
+  .status-lilac {
+    background-color: #EFE6FA; /* Pink */
+  }
   /* Status badge hover effect */
   .status-badge:hover {
     transform: translateY(-1px);
