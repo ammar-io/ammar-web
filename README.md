@@ -1,1 +1,1 @@
-Personal Website | Ammar Ali
+Personal Website of Ammar Ali (me)
