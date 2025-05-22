@@ -245,12 +245,12 @@ function animate() {
 // Update this section in your script.js file - Project Data
 const projects = [
     {
-      title: "MindBridge",
+      title: "MindSync",
       status: "Prototyping",
       statusColor: "blue", // Added color information
       category: "Personal",
-      description: "MindBridge uses EEG signals for real-time emotional state detection. Integrated VR using C# & Unity, via UDP. Dynamically adjusts visual feedback elements for a closed-loop cognitive therapy experience, improving the user's attentional control.",
-      url: "https://www.example.com/project1",
+      description: "MindSync uses EEG signals for real-time emotional state detection. Integrated VR using C# & Unity, via UDP. Dynamically adjusts visual feedback elements for a closed-loop cognitive therapy experience, improving the user's attentional control.",
+      url: "https://github.com/ammar-io/MindSync",
     },
     {
       title: "Kalman Filter Cursor Tracker ",
@@ -274,7 +274,7 @@ const projects = [
       statusColor: "purple", // Added color information
       category: "Research",
       description: "Used ZKP's to develop a SOTA blockchain auditing system for faster digital asset validation and analysis. Built with Python, Circom & JavaScript (Snark.js). ",
-      url: "https://www.example.com/project3",
+      url: "https://github.com/ammar-io/Blockchain-Auditor",
     },
   ];
 
