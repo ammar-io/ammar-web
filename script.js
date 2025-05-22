@@ -4,6 +4,13 @@ let mouseX = 0, mouseY = 0;
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
 
+// Physics-based movement parameters
+let rotationVelocityX = 0;
+let rotationVelocityY = 0;
+const MOUSE_SENSITIVITY = 0.003; // Existing sensitivity
+const ACCELERATION_FACTOR = 0.0002; // How quickly the sphere accelerates towards the mouse
+const DAMPING_FACTOR = 0.95; // How quickly the rotation slows down
+
 // Create circle texture for points
 function createCircleTexture() {
     const canvas = document.createElement('canvas');
@@ -199,8 +206,8 @@ function init() {
 
 // Handle mouse movement
 function onMouseMove(event) {
-    mouseX = (event.clientX - windowHalfX) * 0.003; // Reduced sensitivity
-    mouseY = (event.clientY - windowHalfY) * 0.003;
+    mouseX = (event.clientX - windowHalfX) * MOUSE_SENSITIVITY; // Use constant
+    mouseY = (event.clientY - windowHalfY) * MOUSE_SENSITIVITY; // Use constant
 }
 
 // Handle window resize
@@ -217,10 +224,23 @@ function onWindowResize() {
 function animate() {
     requestAnimationFrame(animate);
 
-    // Smoother rotation based on mouse movement
+    // Physics-based rotation for smoother and more dynamic interaction
     if (brain) {
-        brain.rotation.y += (mouseX - brain.rotation.y) * 0.05;
-        brain.rotation.x += (mouseY - brain.rotation.x) * 0.05;
+        // Calculate acceleration towards the target rotation (mouseX, mouseY are target offsets)
+        const accelX = (mouseY - brain.rotation.x) * ACCELERATION_FACTOR; // Target is mouseY for x-rotation
+        const accelY = (mouseX - brain.rotation.y) * ACCELERATION_FACTOR; // Target is mouseX for y-rotation
+
+        // Update velocities
+        rotationVelocityX += accelX;
+        rotationVelocityY += accelY;
+
+        // Apply damping to velocities
+        rotationVelocityX *= DAMPING_FACTOR;
+        rotationVelocityY *= DAMPING_FACTOR;
+
+        // Update brain rotation
+        brain.rotation.x += rotationVelocityX;
+        brain.rotation.y += rotationVelocityY;
         
         // Subtle pulsing effect
         const scale = 1 + Math.sin(Date.now() * 0.001) * 0.03; // More subtle pulse
