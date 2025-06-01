@@ -5,49 +5,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume | Ammar Ali</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
+<body class="resume-page">
     <header class="header">
         <div class="header-content">
             <div class="main-header">
-                <h1><a href = 'index.html'>WWW.AMMARALT.COM </a></h1>
-                <!-- <h2>@AMMAR-IO</h2> -->
+                <h1><a href="index.html">WWW.AMMARALT.COM</a></h1>
             </div>
         </div>
     </header>
 
     <canvas id="canvas"></canvas>
 
-    <main>
-        <div class="container">
-            <h3 class="page-title">RESUME</h3>
-            <div class="content-section">
-                <p></p>
-                <div class="resume-download">
-                    <!-- Option 1: Direct download link -->
-                    <a href="assets/Ammar_Ali_2025.pdf" download class="download-button">
-                        <span class="download-icon">↓</span>
-                        <span>Download Resume</span>
-                    </a>
-                    
-                    <!-- Option 2: View full page resume
-                    <a href="view-resume.html" class="view-button">
-                        <span class="view-icon">👁️</span>
-                        <span>View Full Resume</span>
-                    </a> -->
+    <main class="resume-container">
+        <div class="resume-header">
+            <h2 class="resume-title">RESUME</h2>
+            <a href="assets/Ammar_Ali_2025.pdf" download class="download-button">
+                <i class="fas fa-download"></i>
+                <span>Download Resume</span>
+            </a>
+        </div>
+
+        <div class="resume-content">
+            <!-- Education Section -->
+            <section class="resume-section">
+                <h3 class="section-title">
+                    <!-- <i class="fas fa-graduation-cap"></i> -->
+                    <span>Education</span>
+                </h3>
+                <div class="timeline-item">
+                    <div class="timeline-icon education">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Bachelor in Brain & Cognitive Science</h4>
+                        <p class="timeline-location">University of Illinois at Urbana-Champaign (UIUC)</p>
+                        <!-- <p class="timeline-gpa">GPA: 3.0/4.0</p> -->
+                        <p class="timeline-date">2022 - 2025</p>
+                        <p class="timeline-description">+ Minors in Computer Science & Statistics</p>
+                    </div>
                 </div>
-                <div class="resume-preview">
-                    <h4>Snapshot of Experiences:</h4>
-                    <ul class="resume-highlights">
-                        <li>BS in Brain & Cognitive Science @ University of Illinois at Urbana-Champaign (UIUC)</li>
-                        <li>Software Engineer @ Disruption Lab, Gies </li>
-                        <li>Machine Learning Engineering Intern @ UIUC </li>
-                        <li>Field Data Engineering Intern @ SpotGenius  </li>
-                        <li>Project Manager @ Neurotech UIUC  </li>
-                        <li>Software Development Director @ Illini VEX Robotics</li>
-                    </ul>
+            </section>
+
+            <!-- Experience Section -->
+            <section class="resume-section">
+                <h3 class="section-title">
+                    <!-- <i class="fas fa-briefcase"></i> -->
+                    <span>Experience</span>
+                </h3>
+                <div class="timeline-item">
+                    <div class="timeline-icon experience">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Project Manager</h4>
+                        <p class="timeline-location">Neurotech, UIUC</p>
+                        <p class="timeline-date">2023 - 2025</p>
+                        <p class="timeline-description">Led a team in developing neurotechnology projects and organizing educational workshops.</p>
+                    </div>
                 </div>
-            </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon experience">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Software Engineer</h4>
+                        <p class="timeline-location">Disruption Lab, Gies College of Business</p>
+                        <p class="timeline-date">2022 - 2024</p>
+                        <p class="timeline-description">Developing innovative software solutions for business applications and research projects.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon experience">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Machine Learning Engineering Intern</h4>
+                        <p class="timeline-location">University of Illinois at Urbana-Champaign</p>
+                        <p class="timeline-date">Summer 2024</p>
+                        <p class="timeline-description">Trained and implemented YOLOV8-10 models for object detection and tracking of recyclable materials.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon experience">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Field Data Engineering Intern</h4>
+                        <p class="timeline-location">SpotGenius</p>
+                        <p class="timeline-date">Summer 2023</p>
+                        <p class="timeline-description">Worked on data collection, processing, and analysis for spatial data applications.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon experience">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Software Development Director</h4>
+                        <p class="timeline-location">Illini VEX Robotics</p>
+                        <p class="timeline-date">2022 - 2023</p>
+                        <p class="timeline-description">Oversaw software development for the R&D division, focusing on machine vision systems and clustering algorithms.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section class="resume-section">
+                <h3 class="section-title">
+                    <span>Skills</span>
+                </h3>
+                <div class="skills-grid">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">C++</span>
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">HTML/CSS</span>
+                    <span class="skill-tag">MATLAB</span>
+                    <span class="skill-tag">R/RStudio</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">ROS</span>
+                    <span class="skill-tag">TensorFlow</span>
+                    <span class="skill-tag">PyTorch</span>
+                    <span class="skill-tag">NumPy/Pandas</span>
+                    <span class="skill-tag">Scikit-learn</span>
+                    <span class="skill-tag">Azure/AWS</span>
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">Machine/Deep Learning</span>
+                    <span class="skill-tag">Computer Vision</span>
+                    <span class="skill-tag">LLM</span>
+                    <span class="skill-tag">CNN/RNN/LSTM</span>
+                    <span class="skill-tag">Data Engineering/Analysis</span>
+                    <span class="skill-tag">Signal Processing </span>
+                    <span class="skill-tag">Data Visualization</span>
+                    <span class="skill-tag">Git/Github</span>
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">React.js</span>
+                    <!-- <span class="skill-tag">Next.js</span> -->
+                    <span class="skill-tag">Flask</span>
+                    <span class="skill-tag">Agile/Scrum</span>
+                    <span class="skill-tag">Leadership</span>
+                    <span class="skill-tag">Project Management</span>
+                    <!-- <span class="skill-tag">Team Collaboration</span> -->
+                </div>
+            </section>
         </div>
     </main>
 
@@ -58,11 +164,10 @@
             <a href="projects.html">PROJECTS</a>
             <a href="resume.html">RESUME</a>
         </div>
+        <div class="social-links">
+            <!-- Social links will be populated by JavaScript -->
+        </div>
     </footer>
-    
-    <div class="social-links">
-        <!-- Social links will be populated by JavaScript -->
-    </div>
 
     <script src="script.js"></script>
 </body>
