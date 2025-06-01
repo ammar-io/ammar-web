@@ -302,18 +302,18 @@ const projects = [
   }
 ];
 
-// Project images using Google DeepMind related visuals
+// Project images using local assets
 const projectImages = {
-  "mindsync": "https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/understanding-agent-cooperation/img/understanding-agent-cooperation-1.png",
-  "kalman-filter": "https://storage.googleapis.com/deepmind-media/DeepMind.com/images/alphastar/alphastar-social.jpg",
-  "recycling": "https://storage.googleapis.com/deepmind-media/DeepMind.com/Images/learning-to-simulate-complex-physics-social.jpg",
-  "blockchain": "https://storage.googleapis.com/deepmind-media/DeepMind.com/Images/ai-for-science-1.jpg"
+  "mindsync": "assets/mindsync.jpg",
+  "kalman-filter": "assets/path.jpg",
+  "recycling": "assets/RRR.jpg",
+  "blockchain": "assets/path.jpg" // Using path.jpg as a fallback for blockchain
 };
 
 // Map project titles to image keys
 const getProjectImage = (title) => {
   const key = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-  return projectImages[key] || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+  return projectImages[key] || 'assets/path.jpg';
 };
 
 // Render projects to the DOM
