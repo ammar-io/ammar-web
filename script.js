@@ -1,6 +1,7 @@
 // Global variables
-let scene, camera, renderer;
-let mouse = new THREE.Vector2();
+let scene, camera, renderer, brain, connections;
+let mouseX = 0, mouseY = 0;
+let rotationVelocityX = 0, rotationVelocityY = 0;
 let animationFrame;
 
 // Animation parameters
@@ -380,306 +381,119 @@ class ProjectCarousel {
   }
 }
 
-// Check if Three.js is loaded
-function checkThreeJSLoaded() {
-  return typeof THREE !== 'undefined';
-}
-
-// Wait for Three.js to load before initializing 3D visualization
-function waitForThreeJS(callback) {
-  if (checkThreeJSLoaded()) {
-    callback();
-  } else {
-    setTimeout(() => waitForThreeJS(callback), 100);
-  }
-}
-
-// Interactive Curl-Noise Sphere Visualization
-class WaveSphere {
-  constructor(canvasId = 'neural-canvas') {
-    this.canvas = document.getElementById(canvasId);
-    this.raycaster = new THREE.Raycaster();
-    this.mouse = new THREE.Vector2();
-    this.time = 0;
-    this.ripples = [];
-
-    this.radius = 3;
-    this.pointCount = 50000;
-
-    if (!this.canvas) return;
+// Neural visualization with Three.js
+class NeuralVisualization {
+  constructor() {
+    this.canvas = document.getElementById('neural-canvas');
+    this.darkMode = new DarkModeManager();
     this.init();
   }
 
   init() {
-    // Hide loading indicator
-    const loadingIndicator = document.getElementById('neural-loading');
-    if (loadingIndicator) {
-      loadingIndicator.classList.add('hidden');
-    }
+    if (!this.canvas) return;
 
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 8);
-
-    renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true, antialias: true });
-    renderer.setClearColor(0x000000, 0); // transparent
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    this.createSphere();
-    this.addControls();
-    this.addEventListeners();
+    this.setupScene();
+    this.createNeuralNetwork();
+    this.setupEventListeners();
     this.animate();
   }
 
-  createSphere() {
-    const geom = new THREE.BufferGeometry();
-    const positions = new Float32Array(this.pointCount * 3);
+  setupScene() {
+    // Scene setup
+    scene = new THREE.Scene();
+    
+    // Camera
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 10;
 
-    for (let i = 0; i < this.pointCount; i++) {
-      const phi = Math.acos(2 * Math.random() - 1) - Math.PI / 2;
-      const theta = 2 * Math.PI * Math.random();
-      const x = Math.cos(phi) * Math.cos(theta);
-      const y = Math.sin(phi);
-      const z = Math.cos(phi) * Math.sin(theta);
-      positions.set([x * this.radius, y * this.radius, z * this.radius], i * 3);
-    }
+    // Renderer
+    renderer = new THREE.WebGLRenderer({ 
+      canvas: this.canvas,
+      alpha: true,
+      antialias: true
+    });
+    
+    const bgColor = this.darkMode.isDark ? '#131C2E' : '#F8F9FB'; /* Updated to accurate palette */
+    renderer.setClearColor(bgColor, 1);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+  }
 
-    geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    const vertex = `
-      varying float vDisp;
-      uniform float uTime;
-      uniform vec3 uMouse;
-      uniform int uRippleCount;
-      uniform vec3 uRipples[10];
-
-      // 3D Noise functions
-      vec3 mod289(vec3 x) {
-        return x - floor(x * (1.0 / 289.0)) * 289.0;
-      }
-      
-      vec4 mod289(vec4 x) {
-        return x - floor(x * (1.0 / 289.0)) * 289.0;
-      }
-      
-      vec4 permute(vec4 x) {
-        return mod289(((x*34.0)+1.0)*x);
-      }
-      
-      vec4 taylorInvSqrt(vec4 r) {
-        return 1.79284291400159 - 0.85373472095314 * r;
-      }
-      
-      float snoise(vec3 v) {
-        const vec2 C = vec2(1.0/6.0, 1.0/3.0);
-        const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
-        
-        vec3 i = floor(v + dot(v, C.yyy));
-        vec3 x0 = v - i + dot(i, C.xxx);
-        
-        vec3 g = step(x0.yzx, x0.xyz);
-        vec3 l = 1.0 - g;
-        vec3 i1 = min(g.xyz, l.zxy);
-        vec3 i2 = max(g.xyz, l.zxy);
-        
-        vec3 x1 = x0 - i1 + C.xxx;
-        vec3 x2 = x0 - i2 + C.yyy;
-        vec3 x3 = x0 - D.yyy;
-        
-        i = mod289(i);
-        vec4 p = permute(permute(permute(
-                   i.z + vec4(0.0, i1.z, i2.z, 1.0))
-                 + i.y + vec4(0.0, i1.y, i2.y, 1.0))
-                 + i.x + vec4(0.0, i1.x, i2.x, 1.0));
-        
-        float n_ = 0.142857142857;
-        vec3 ns = n_ * D.wyz - D.xzx;
-        
-        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-        
-        vec4 x_ = floor(j * ns.z);
-        vec4 y_ = floor(j - 7.0 * x_);
-        
-        vec4 x = x_ *ns.x + ns.yyyy;
-        vec4 y = y_ *ns.x + ns.yyyy;
-        vec4 h = 1.0 - abs(x) - abs(y);
-        
-        vec4 b0 = vec4(x.xy, y.xy);
-        vec4 b1 = vec4(x.zw, y.zw);
-        
-        vec4 s0 = floor(b0)*2.0 + 1.0;
-        vec4 s1 = floor(b1)*2.0 + 1.0;
-        vec4 sh = -step(h, vec4(0.0));
-        
-        vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
-        vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
-        
-        vec3 p0 = vec3(a0.xy, h.x);
-        vec3 p1 = vec3(a0.zw, h.y);
-        vec3 p2 = vec3(a1.xy, h.z);
-        vec3 p3 = vec3(a1.zw, h.w);
-        
-        vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
-        p0 *= norm.x;
-        p1 *= norm.y;
-        p2 *= norm.z;
-        p3 *= norm.w;
-        
-        vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-        m = m * m;
-        return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
-      }
-
-      vec3 curlNoise(vec3 p) {
-        float epsilon = 0.1;
-        float n1, n2, a, b;
-        
-        n1 = snoise(vec3(p.x, p.y + epsilon, p.z));
-        n2 = snoise(vec3(p.x, p.y - epsilon, p.z));
-        a = (n1 - n2) / (2.0 * epsilon);
-        
-        n1 = snoise(vec3(p.x, p.y, p.z + epsilon));
-        n2 = snoise(vec3(p.x, p.y, p.z - epsilon));
-        b = (n1 - n2) / (2.0 * epsilon);
-        
-        vec3 curl = vec3(a - b, 0.0, 0.0);
-        
-        n1 = snoise(vec3(p.x, p.y, p.z + epsilon));
-        n2 = snoise(vec3(p.x, p.y, p.z - epsilon));
-        a = (n1 - n2) / (2.0 * epsilon);
-        
-        n1 = snoise(vec3(p.x + epsilon, p.y, p.z));
-        n2 = snoise(vec3(p.x - epsilon, p.y, p.z));
-        b = (n1 - n2) / (2.0 * epsilon);
-        
-        curl.y = a - b;
-        
-        n1 = snoise(vec3(p.x + epsilon, p.y, p.z));
-        n2 = snoise(vec3(p.x - epsilon, p.y, p.z));
-        a = (n1 - n2) / (2.0 * epsilon);
-        
-        n1 = snoise(vec3(p.x, p.y + epsilon, p.z));
-        n2 = snoise(vec3(p.x, p.y - epsilon, p.z));
-        b = (n1 - n2) / (2.0 * epsilon);
-        
-        curl.z = a - b;
-        
-        return curl;
-      }
-
-      void main() {
-        vec3 pos = position;
-        vec3 npos = normalize(pos) * 0.5 + uTime * 0.3;
-        vec3 c = curlNoise(npos) * 0.3;
-
-        vec3 ripple = vec3(0);
-        for (int i = 0; i < 10; i++) {
-          if (i >= uRippleCount) break;
-          vec3 rp = uRipples[i];
-          float d = distance(pos, rp);
-          float strength = sin((d - (uTime - rp.z)) * 5.0) * exp(-d * 2.0);
-          ripple += normalize(pos - rp) * strength * 0.5;
-        }
-
-        pos += c + ripple;
-        vDisp = length(c + ripple);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-        gl_PointSize = 2.0;
-      }
-    `;
-
-    const fragment = `
-      varying float vDisp;
-      void main() {
-        // Oxford Blue to Azul Macaubas gradient based on displacement
-        vec3 darkPurple = vec3(0.0, 0.129, 0.278); // Oxford Blue #002147
-        vec3 accentTeal = vec3(0.431, 0.647, 0.8); // Azul Macaubas #6EA5CC
-        
-        float intensity = clamp(vDisp * 3.0, 0.0, 1.0);
-        vec3 color = mix(darkPurple, accentTeal, intensity);
-        
-        // Add subtle copper highlight for high displacement
-        vec3 copper = vec3(0.706, 0.404, 0.235); // Copper #B4673C
-        if (intensity > 0.7) {
-          float copperMix = (intensity - 0.7) / 0.3;
-          color = mix(color, copper, copperMix * 0.3);
-        }
-        
-        // Circular point shape
-        vec2 d = 2.0 * gl_PointCoord - 1.0;
-        float a = 1.0 - dot(d, d);
-        a = clamp(a, 0.0, 1.0);
-        gl_FragColor = vec4(color, a * 0.9);
-      }
-    `;
-
-    const mat = new THREE.ShaderMaterial({
-      vertexShader: vertex,
-      fragmentShader: fragment,
-      uniforms: {
-        uTime: { value: 0 },
-        uMouse: { value: new THREE.Vector3() },
-        uRippleCount: { value: 0 },
-        uRipples: { value: Array(10).fill(new THREE.Vector3()) }
-      },
+  createNeuralNetwork() {
+    // Create nodes
+    const nodeGeometry = new THREE.SphereGeometry(0.05, 16, 16);
+    const nodeMaterial = new THREE.MeshBasicMaterial({ 
+      color: this.darkMode.isDark ? '#6EA5CC' : '#6EA5CC', /* Accurate Azul Macaubas for both themes */
       transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false
+      opacity: 0.8
     });
 
-    this.points = new THREE.Points(geom, mat);
-    scene.add(this.points);
-  }
+    const nodes = new THREE.Group();
+    const nodePositions = [];
 
-  addControls() {
-    if (typeof THREE.OrbitControls !== 'undefined') {
-      this.controls = new THREE.OrbitControls(camera, renderer.domElement);
-      this.controls.enableDamping = true;
-      this.controls.dampingFactor = 0.05;
-      this.controls.autoRotate = true;
-      this.controls.autoRotateSpeed = 0.5;
-      this.controls.enableZoom = true;
-      this.controls.enablePan = false;
-      this.controls.minDistance = 5;
-      this.controls.maxDistance = 20;
-    } else {
-      console.warn('OrbitControls not available - using manual rotation');
-      this.manualRotation = { x: 0, y: 0 };
+    // Create random node positions
+    for (let i = 0; i < 100; i++) {
+      const theta = Math.random() * 2 * Math.PI;
+      const phi = Math.acos(2 * Math.random() - 1);
+      const radius = 3 + Math.random() * 2;
+
+      const x = radius * Math.sin(phi) * Math.cos(theta);
+      const y = radius * Math.sin(phi) * Math.sin(theta);
+      const z = radius * Math.cos(phi);
+
+      const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+      node.position.set(x, y, z);
+      nodes.add(node);
+      nodePositions.push(new THREE.Vector3(x, y, z));
     }
+
+    scene.add(nodes);
+    this.nodes = nodes;
+
+    // Create connections
+    this.createConnections(nodePositions);
   }
 
-  addEventListeners() {
-    window.addEventListener('resize', () => this.onResize());
-    window.addEventListener('mousemove', e => this.onMouse(e));
-  }
+  createConnections(positions) {
+    const connectionGeometry = new THREE.BufferGeometry();
+    const connectionVertices = [];
 
-  onMouse(e) {
-    this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-    this.raycaster.setFromCamera(this.mouse, camera);
-    const sphere = new THREE.Mesh(new THREE.SphereGeometry(this.radius, 32, 32));
-    const i = this.raycaster.intersectObject(sphere);
-    if (i.length) {
-      const pt = i[0].point;
-      this.addRipple(pt);
+    // Create connections between nearby nodes
+    for (let i = 0; i < positions.length; i++) {
+      for (let j = i + 1; j < positions.length; j++) {
+        const distance = positions[i].distanceTo(positions[j]);
+        if (distance < 2 && Math.random() > 0.7) {
+          connectionVertices.push(
+            positions[i].x, positions[i].y, positions[i].z,
+            positions[j].x, positions[j].y, positions[j].z
+          );
+        }
+      }
     }
-  }
 
-  addRipple(pos) {
-    if (this.ripples.length >= 10) this.ripples.shift();
-    this.ripples.push({ pos, t: this.time });
-  }
-
-  updateRipples() {
-    const u = this.points.material.uniforms;
-    u.uRippleCount.value = this.ripples.length;
-    this.ripples.forEach((r, idx) => {
-      u.uRipples.value[idx].set(r.pos.x, r.pos.y, r.t);
+    connectionGeometry.setAttribute('position', new THREE.Float32BufferAttribute(connectionVertices, 3));
+    
+    const connectionMaterial = new THREE.LineBasicMaterial({
+      color: this.darkMode.isDark ? '#6EA5CC' : '#6EA5CC', /* Accurate Azul Macaubas for both themes */
+      transparent: true,
+      opacity: 0.3
     });
+
+    connections = new THREE.LineSegments(connectionGeometry, connectionMaterial);
+    scene.add(connections);
   }
 
-  onResize() {
+  setupEventListeners() {
+    window.addEventListener('mousemove', (event) => this.onMouseMove(event));
+    window.addEventListener('resize', () => this.onWindowResize());
+  }
+
+  onMouseMove(event) {
+    mouseX = (event.clientX - window.innerWidth / 2) * MOUSE_SENSITIVITY;
+    mouseY = (event.clientY - window.innerHeight / 2) * MOUSE_SENSITIVITY;
+  }
+
+  onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -687,19 +501,24 @@ class WaveSphere {
 
   animate() {
     animationFrame = requestAnimationFrame(() => this.animate());
-    const dt = 0.016;
-    this.time += dt;
-    this.points.material.uniforms.uTime.value = this.time;
-    this.updateRipples();
-    if (this.controls) {
-      this.controls.update();
-    } else if (this.manualRotation) {
-      this.manualRotation.y += 0.005;
-      if (this.points) {
-        this.points.rotation.y = this.manualRotation.y;
-        this.points.rotation.x = Math.sin(this.time * 0.3) * 0.1;
-      }
+
+    // Update rotation based on mouse movement
+    rotationVelocityX += (mouseY - rotationVelocityX) * ACCELERATION_FACTOR;
+    rotationVelocityY += (mouseX - rotationVelocityY) * ACCELERATION_FACTOR;
+
+    rotationVelocityX *= DAMPING_FACTOR;
+    rotationVelocityY *= DAMPING_FACTOR;
+
+    if (this.nodes) {
+      this.nodes.rotation.x += rotationVelocityX;
+      this.nodes.rotation.y += rotationVelocityY;
     }
+
+    if (connections) {
+      connections.rotation.x += rotationVelocityX;
+      connections.rotation.y += rotationVelocityY;
+    }
+
     renderer.render(scene, camera);
   }
 }
@@ -833,27 +652,30 @@ class PDFViewerManager {
   }
 }
 
-// Entry point
-window.addEventListener('DOMContentLoaded', () => {
-  new DarkModeManager();
-  new NavigationManager();
-  new FadeInManager();
-  
-  setTimeout(() => {
-    new StatsManager();
-    new ProjectCarousel();
-    
-    // Initialize WaveSphere if neural canvas exists
-    if (document.getElementById('neural-canvas')) {
-      waitForThreeJS(() => {
-        new WaveSphere();
-      });
-    }
-    
-    if (document.getElementById('pdf-iframe')) new PDFViewerManager();
-    if (document.querySelector('.projects-filters')) new ProjectsManager();
-    if (document.querySelector('.skills-section')) new SkillsManager();
-  }, 100);
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize all managers
+  const darkMode = new DarkModeManager();
+  const navigation = new NavigationManager();
+  const stats = new StatsManager();
+  const carousel = new ProjectCarousel();
+  const neural = new NeuralVisualization();
+  const fadeIn = new FadeInManager();
+
+  // Initialize PDF viewer if on resume page
+  if (document.getElementById('pdf-iframe')) {
+    const pdfViewer = new PDFViewerManager();
+  }
+
+  // Initialize projects manager if on projects page
+  if (document.getElementById('projects-container') && document.querySelector('.projects-filters')) {
+    const projectsManager = new ProjectsManager();
+  }
+
+  // Initialize skills manager if on skills page
+  if (document.querySelector('.skills-section')) {
+    const skillsManager = new SkillsManager();
+  }
 
   // Smooth scrolling for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -887,7 +709,7 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 }
 
-// Legacy init function for compatibility - Updated for Wave Sea Flow
+// Legacy init function for compatibility
 function init() {
     // Scene setup
     scene = new THREE.Scene();
@@ -901,56 +723,54 @@ function init() {
         return;
     }
 
-    // Set background color
+    // Set a dark background (like on hys-inc.jp)
     renderer = new THREE.WebGLRenderer({ 
         canvas: canvas,
         alpha: true,  // allow transparency so CSS shows through
-        antialias: false
+        antialias: true
     });
     renderer.setClearColor('#F8F9FB', 1); // Set to match new background color
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(window.devicePixelRatio);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 8, 12);
-    camera.lookAt(0, 0, 0);
 
-    // Create wave sea flow geometry
+    // Create brain-like geometry
     const geometry = new THREE.BufferGeometry();
     const vertices = [];
-    const waveWidth = 60;
-    const waveHeight = 60;
-    const waveSpacing = 0.3;
+    const radius = 5; // Slightly smaller for better proportion
 
-    // Create grid of wave points
-    for (let x = 0; x < waveWidth; x++) {
-        for (let z = 0; z < waveHeight; z++) {
-            const nodeX = (x - waveWidth / 2) * waveSpacing;
-            const nodeZ = (z - waveHeight / 2) * waveSpacing;
-            const nodeY = 0; // Base height, will be animated
+    // Shape parameters
+    const NUM_POINTS = 2000;
 
-            vertices.push(nodeX, nodeY, nodeZ);
-        }
+    // Create sphere geometry points
+    for (let i = 0; i < NUM_POINTS; i++) {
+        const theta = Math.random() * 2 * Math.PI;
+        // Use random cosine for uniform distribution on a sphere
+        const phi = Math.acos(2 * Math.random() - 1);
+
+        const x = radius * Math.sin(phi) * Math.cos(theta);
+        const y = radius * Math.sin(phi) * Math.sin(theta);
+        const z = radius * Math.cos(phi);
+
+        vertices.push(x, y, z);
     }
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 
-    // Store original positions for wave calculations
+    // After setting attributes on geometry, store a copy of the original positions:
     geometry.userData.originalPositions = geometry.attributes.position.array.slice();
-    geometry.userData.waveWidth = waveWidth;
-    geometry.userData.waveHeight = waveHeight;
-    geometry.userData.waveSpacing = waveSpacing;
 
     // Create circle texture (using a soft white circle)
     const circleTexture = createCircleTexture();
 
-    // Use subtle points for wave nodes
+    // Use subtle points to match the minimalist aesthetic
     const pointMaterial = new THREE.PointsMaterial({
         map: circleTexture,
         alphaTest: 0.5,
         color: '#6EA5CC', // Accurate Azul Macaubas for dots
-        size: 0.08, // slightly larger for wave nodes
+        size: 0.05, // smaller dots for cleaner look
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.8,
         sizeAttenuation: true,
         depthWrite: false
     });
@@ -1063,82 +883,62 @@ function init() {
     window.addEventListener('resize', onWindowResize);
 }
 
-// Handle mouse movement - Updated for Wave Sea Flow
+// Handle mouse movement
 function onMouseMove(event) {
-    // Convert mouse position to normalized device coordinates for wave interaction
-    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+    mouseX = (event.clientX - windowHalfX) * MOUSE_SENSITIVITY; // Use constant
+    mouseY = (event.clientY - windowHalfY) * MOUSE_SENSITIVITY; // Use constant
 }
 
-// Handle window resize - Updated for Wave Sea Flow
+// Handle window resize
 function onWindowResize() {
+    windowHalfX = window.innerWidth / 2;
+    windowHalfY = window.innerHeight / 2;
+    
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// Animation loop - Updated for Wave Sea Flow
+// Animation loop
 function animate() {
     requestAnimationFrame(animate);
 
-    // Wave animation for legacy version
-    if (brain && brain.geometry.userData.originalPositions) {
-        const time = Date.now() * 0.002; // Wave animation speed
+    // Physics-based rotation for smoother and more dynamic interaction
+    if (brain) {
+        // Add a slow, constant rotation
+        brain.rotation.x += 0.0000002;
+        brain.rotation.y += 0.0000003;
+
+        // Calculate acceleration towards the target rotation (mouseX, mouseY are target offsets)
+        // Invert mouse input for inverse rotation
+        const accelX = (-mouseY - brain.rotation.x) * ACCELERATION_FACTOR; // Target is -mouseY for x-rotation
+        const accelY = (-mouseX - brain.rotation.y) * ACCELERATION_FACTOR; // Target is -mouseX for y-rotation
+
+        // Update velocities
+        rotationVelocityX += accelX;
+        rotationVelocityY += accelY;
+
+        // Apply damping to velocities
+        rotationVelocityX *= DAMPING_FACTOR;
+        rotationVelocityY *= DAMPING_FACTOR;
+
+        // Update brain rotation
+        brain.rotation.x += rotationVelocityX;
+        brain.rotation.y += rotationVelocityY;
+        
+        // Subtle pulsing effect
+        const scale = 1 + Math.sin(Date.now() * 0.001) * 0.03; // More subtle pulse
+        brain.scale.set(scale, scale, scale);
+
+        // Subtle shake effect
+        const shakeAmplitude = 0.015; // Reduced amplitude
         const positions = brain.geometry.attributes.position.array;
         const originalPositions = brain.geometry.userData.originalPositions;
-        const waveWidth = brain.geometry.userData.waveWidth;
-        const waveHeight = brain.geometry.userData.waveHeight;
-        const waveSpacing = brain.geometry.userData.waveSpacing;
-        
-        // Mouse interaction variables
-        let mouseWorldX = 0;
-        let mouseWorldZ = 0;
-        if (typeof mouseX !== 'undefined' && typeof mouseY !== 'undefined') {
-            // Convert normalized mouse coordinates to world coordinates
-            mouseWorldX = mouseX * 10;
-            mouseWorldZ = mouseY * 10;
+        const time = Date.now() * 0.003;
+        for (let i = 0; i < positions.length; i++) {
+            positions[i] = originalPositions[i] + shakeAmplitude * Math.sin(time + i * 0.1);
         }
-
-        // Animate wave heights
-        for (let i = 0; i < positions.length; i += 3) {
-            const x = originalPositions[i];
-            const z = originalPositions[i + 2];
-            
-            // Base wave calculation using sine waves
-            let waveHeight = 0;
-            
-            // Multiple wave patterns for realistic ocean feel
-            waveHeight += Math.sin(x * 2 + time) * 0.3;
-            waveHeight += Math.sin(z * 1.5 + time * 0.8) * 0.4;
-            waveHeight += Math.sin(x * 0.8 + z * 0.8 + time * 1.2) * 0.2;
-            
-            // Mouse interaction - create ripple effect
-            const distanceToMouse = Math.sqrt(
-                Math.pow(x - mouseWorldX, 2) + 
-                Math.pow(z - mouseWorldZ, 2)
-            );
-            
-            const mouseRadius = 3.0;
-            const mouseInfluence = 2.0;
-            
-            if (distanceToMouse < mouseRadius) {
-                const influence = (mouseRadius - distanceToMouse) / mouseRadius;
-                const ripple = Math.sin(distanceToMouse * 3 - time * 4) * influence * mouseInfluence;
-                waveHeight += ripple;
-            }
-            
-            // Apply the wave height
-            positions[i + 1] = originalPositions[i + 1] + waveHeight;
-        }
-        
         brain.geometry.attributes.position.needsUpdate = true;
-        
-        // Subtle camera movement based on mouse
-        if (typeof mouseX !== 'undefined' && typeof mouseY !== 'undefined') {
-            camera.position.x += (mouseX * 2 - camera.position.x) * 0.01;
-            camera.position.z += (mouseY * 2 - camera.position.z) * 0.01;
-            camera.lookAt(0, 0, 0);
-        }
     }
 
     if (renderer && scene && camera) {
@@ -1307,42 +1107,13 @@ function renderSocials() {
   });
 }
 
-// Create circle texture for wave nodes
-function createCircleTexture() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 32;
-  canvas.height = 32;
-  
-  const context = canvas.getContext('2d');
-  const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
-  gradient.addColorStop(0, 'rgba(255,255,255,1)');
-  gradient.addColorStop(0.2, 'rgba(255,255,255,1)');
-  gradient.addColorStop(0.4, 'rgba(255,255,255,0.8)');
-  gradient.addColorStop(1, 'rgba(255,255,255,0)');
-  
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, 32, 32);
-  
-  const texture = new THREE.Texture(canvas);
-  texture.needsUpdate = true;
-  return texture;
-}
-
 // Wait for DOM to be fully loaded before running
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize the 3D wave visualization
+  // Initialize the 3D brain visualization
   try {
-    if (document.getElementById('neural-canvas')) {
-      // Use new NeuralVisualization class if canvas exists
-      waitForThreeJS(() => {
-        const neural = new NeuralVisualization();
-      });
-    } else if (document.querySelector('#canvas')) {
-      // Use legacy init for other canvas elements
-      init();
-      animate();
-    }
-    console.log("3D wave visualization initialized");
+    init();
+    animate();
+    console.log("3D visualization initialized");
   } catch (e) {
     console.error("Error initializing 3D visualization:", e);
   }
