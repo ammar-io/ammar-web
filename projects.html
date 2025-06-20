@@ -3,44 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects | Ammar Ali</title>
+    <title>Projects & Research | Ammar Ali</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Projects & Research by Ammar Ali - Neurotechnology, brain-computer interfaces, EEG signal processing, and machine learning applications in neuroscience.">
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="main-header">
-                <h1><a href="index.html">WWW.AMMARALT.COM</a></h1>
-                <!-- <h2>@AMMAR-IO</h2> -->
+    <!-- Global Navigation -->
+    <nav class="global-nav" id="global-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link">
+                    <div class="neuron-monogram">
+                        <svg width="32" height="32" viewBox="0 0 32 32">
+                            <circle cx="16" cy="16" r="4" fill="currentColor"/>
+                            <path d="M16 2v12M16 18v12M2 16h12M18 16h12" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="8" cy="8" r="2" fill="currentColor"/>
+                            <circle cx="24" cy="8" r="2" fill="currentColor"/>
+                            <circle cx="8" cy="24" r="2" fill="currentColor"/>
+                            <circle cx="24" cy="24" r="2" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <span class="brand-text">Ammar Ali</span>
+                </a>
+            </div>
+            
+                  <div class="nav-links">
+        <a href="about.html">About</a>
+        <a href="skills.html">Skills & Tools</a>
+        <a href="projects.html" class="active">Projects</a>
+        <a href="blog.html">Blog</a>
+        <a href="resume.html">Resume</a>
+        <a href="contact.html">Contact</a>
+      </div>
+            
+            <div class="nav-actions">
+                <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <canvas id="canvas"></canvas>
-
-    <main>
+    <div class="page-container compact-page">
         <div class="container">
-            <h3 class="page-title">PROJECTS</h3>
-            <div class="content-section">
-                <!-- <p>Below is a collection of my technical projects. Each project represents different areas of my interests and expertise, from neuroscience applications to machine learning and computer vision.</p> -->
+            <!-- Page Header -->
+            <div class="page-header fade-in">
+                <h1 class="page-title">Projects + Research</h1>
+                <p class="page-subtitle">
+                    
+                </p>
             </div>
-            <div id="projects-container">
-                <!-- Projects will be loaded from JavaScript -->
-            </div>
-        </div>
-    </main>
 
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="index.html">HOME</a>
-            <a href="life.html">LIFE</a>
-            <a href="projects.html">PROJECTS</a>
-            <a href="resume.html">RESUME</a>
+            <!-- Project Filters -->
+            <section class="projects-filters fade-in">
+                <div class="filters-container">
+                    <button class="filter-btn active" data-filter="all">All Projects</button>
+                    <button class="filter-btn" data-filter="neurotechnology">Neurotechnology</button>
+                    <button class="filter-btn" data-filter="machine-learning">Machine Learning</button>
+                    <button class="filter-btn" data-filter="computer-vision">Computer Vision</button>
+                    <button class="filter-btn" data-filter="research">Research</button>
+                    <button class="filter-btn" data-filter="open-source">Open Source</button>
+                </div>
+            </section>
+
+            <!-- Projects Grid -->
+            <section class="projects-grid fade-in">
+                <div class="projects-container" id="projects-container">
+                    <!-- Projects will be loaded by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Featured Research Section -->
+            <section class="featured-research fade-in">
+                <h2 class="section-title">Research Highlights</h2>
+                <div class="research-grid">
+                    <div class="research-card">
+                        <div class="research-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9M15 9.5V9L21 9V11M12 7L12 22M6 22V20C6 18.9 6.9 18 8 18S10 18.9 10 20V22M16 22V20C16 18.9 16.9 18 18 18S20 18.9 20 20V22" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3>EEG Signal Classification</h3>
+                        <p>Advanced deep learning pipeline for real-time EEG signal classification using convolutional and recurrent neural networks. Achieved 94% accuracy in motor imagery classification tasks.</p>
+                        <div class="research-metrics">
+                            <span class="metric">94% Accuracy</span>
+                            <span class="metric">Real-time Processing</span>
+                        </div>
+                    </div>
+
+                    <div class="research-card">
+                        <div class="research-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M2 12h20" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3>Neurofeedback Systems</h3>
+                        <p>Interactive neurofeedback training systems combining real-time EEG analysis with gamification elements for enhanced attention training and cognitive rehabilitation.</p>
+                        <div class="research-metrics">
+                            <span class="metric">Real-time Feedback</span>
+                            <span class="metric">Clinical Applications</span>
+                        </div>
+                    </div>
+
+                    <div class="research-card">
+                        <div class="research-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                                <path d="M21 15l-5-5L5 21" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3>Brain-Computer Interfaces</h3>
+                        <p>Multi-modal BCI systems combining EEG and eye-tracking technologies for enhanced control accuracy in assistive technologies and human-computer interaction.</p>
+                        <div class="research-metrics">
+                            <span class="metric">Multi-modal Approach</span>
+                            <span class="metric">Assistive Technology</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-        <div class="social-links">
-            <!-- Social links will be populated by JavaScript -->
-        </div>
-    </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>
