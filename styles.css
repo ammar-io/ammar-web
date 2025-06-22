@@ -442,21 +442,19 @@ body {
   padding: var(--spacing-lg);
 }
 
-.stat-number {
-  display: block;
+.stat-item .stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
   font-family: var(--font-heading);
-  font-size: 3rem;
-  font-weight: 800;
-  color: var(--color-accent-teal);
-  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+  display: block;
+  line-height: 1.1;
 }
 
-.stat-label {
+.stat-item .stat-label {
+  font-size: 0.9rem;
   color: var(--color-text-secondary);
-  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.875rem;
 }
 
 /* Featured Projects Section */
@@ -1574,18 +1572,18 @@ body {
   border: 1px solid var(--color-border);
 }
 
-.stat-number {
-  font-family: var(--font-heading);
-  font-size: 1.75rem;
+.stat-card .stat-number {
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--color-accent-teal);
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
+  display: block;
 }
 
-.stat-label {
+.stat-card .stat-label {
   font-size: 0.8rem;
   color: var(--color-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  margin-top: var(--spacing-xs);
 }
 
 .contact-section {
@@ -1827,6 +1825,10 @@ body {
   overflow: auto;
   background-color: rgba(0,0,0,0.6);
   backdrop-filter: blur(5px);
+}
+
+.project-modal.visible {
+  display: block;
 }
 
 .project-modal-content {

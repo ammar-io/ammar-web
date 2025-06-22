@@ -674,11 +674,13 @@ class ProjectModalManager {
   }
 
   createModal() {
-    if (document.getElementById('project-modal')) return;
-    const modalElement = document.createElement('div');
-    modalElement.id = 'project-modal';
-    modalElement.className = 'project-modal';
-    document.body.appendChild(modalElement);
+    let modalElement = document.getElementById('project-modal');
+    if (!modalElement) {
+        modalElement = document.createElement('div');
+        modalElement.id = 'project-modal';
+        modalElement.className = 'project-modal';
+        document.body.appendChild(modalElement);
+    }
     this.modal = modalElement;
   }
 
