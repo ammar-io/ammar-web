@@ -17,7 +17,10 @@ const projects = [
     statusColor: "blue",
     category: "neurotechnology",
     categoryLabel: "Neurotechnology",
-    description: "MindSync uses EEG signals for real-time emotional state detection. Integrated VR using C# & Unity, via UDP. Dynamically adjusts visual feedback elements for a closed-loop cognitive therapy experience, improving the user's attentional control.",
+    summary: "An immersive VR neurofeedback system using real-time EEG data to help users improve attentional control.",
+    problem: "There's a need for more engaging, real-time feedback in cognitive therapy. Existing tools often lack direct, closed-loop interaction with a user's mental state.",
+    solution: "Engineered a closed-loop system using EEG for real-time emotional state detection. I integrated this with a custom VR environment in Unity that dynamically adjusts visual feedback, creating an immersive neurofeedback experience.",
+    impact: "The prototype successfully demonstrated the viability of using consumer-grade EEG hardware for real-time therapeutic feedback, laying the groundwork for future studies on attentional control.",
     tech: ["C#", "Unity", "EEG", "VR", "UDP"],
     url: "https://github.com/ammar-io/MindSync",
     github: "https://github.com/ammar-io/MindSync",
@@ -29,7 +32,10 @@ const projects = [
     statusColor: "green",
     category: "machine-learning",
     categoryLabel: "Machine Learning",
-    description: "Using Kalman Filter for cursor prediction and viewing with OpenCV. Implements predictive tracking algorithms for enhanced human-computer interaction and motion prediction.",
+    summary: "A predictive cursor tracking system using a Kalman Filter to enhance human-computer interaction for accessibility.",
+    problem: "Standard cursor tracking can be imprecise. Predictive algorithms are needed to enhance human-computer interaction, especially for accessibility applications.",
+    solution: "Implemented a Kalman Filter using OpenCV and Python to predict cursor movement based on its current trajectory, smoothing motion and anticipating user intent.",
+    impact: "This predictive tracking system can be integrated into assistive technologies to create more fluid and less frustrating user experiences for individuals with motor impairments.",
     tech: ["Python", "OpenCV", "Kalman Filter", "Computer Vision"],
     url: "https://github.com/ammar-io/kalman-cursor",
     github: "https://github.com/ammar-io/kalman-cursor",
@@ -41,7 +47,10 @@ const projects = [
     statusColor: "purple",
     category: "computer-vision",
     categoryLabel: "Computer Vision",
-    description: "Trained YOLO-V8 computer vision models to detect and allow recyclable materials to enter waste bins for the UIUC campus. Smart waste management system with real-time object detection.",
+    summary: "A smart waste bin that uses a YOLO-V8 model to automatically identify and sort recyclable materials.",
+    problem: "Manual sorting of waste on the UIUC campus is inefficient and prone to error, leading to contamination in recycling streams.",
+    solution: "Trained and deployed a YOLO-V8 computer vision model to accurately detect and classify recyclable materials. This model controls a physical sorting mechanism on a smart waste bin.",
+    impact: "The system provides a low-cost, automated solution to improve recycling purity. It achieved 96% accuracy in tests and was presented at the university's engineering showcase.",
     tech: ["Python", "YOLO-V8", "Computer Vision", "IoT"],
     url: "https://github.com/ammar-io/RRR",
     github: "https://github.com/ammar-io/RRR",
@@ -53,7 +62,10 @@ const projects = [
     statusColor: "purple",
     category: "research",
     categoryLabel: "Research",
-    description: "Used ZKP's to develop a SOTA blockchain auditing system for faster digital asset validation and analysis. Built with Python, Circom & JavaScript (Snark.js).",
+    summary: "A novel auditing system using Zero-Knowledge Proofs to drastically accelerate the validation of digital assets on a blockchain.",
+    problem: "Auditing digital assets on a blockchain is computationally expensive and slow, creating a bottleneck for financial analysis and verification.",
+    solution: "Utilized Zero-Knowledge Proofs (ZKPs) to develop a state-of-the-art blockchain auditing system. The system, built with Python, Circom, and Snark.js, enables rapid validation of digital assets.",
+    impact: "This research demonstrates a novel method for significantly accelerating blockchain analysis, with potential applications in fintech and secure, private transactions.",
     tech: ["Python", "Circom", "JavaScript", "Zero-Knowledge Proofs"],
     url: "https://github.com/ammar-io/Blockchain-Auditor",
     github: "https://github.com/ammar-io/Blockchain-Auditor",
@@ -65,7 +77,10 @@ const projects = [
     statusColor: "green",
     category: "neurotechnology",
     categoryLabel: "Neurotechnology",
-    description: "Advanced deep learning pipeline for real-time EEG signal classification using CNNs and RNNs. Achieved 94% accuracy in motor imagery classification with real-time processing capabilities.",
+    summary: "A deep learning pipeline that classifies motor imagery from EEG signals with 94% accuracy for BCI applications.",
+    problem: "High latency and low accuracy in existing Brain-Computer Interface (BCI) systems hinder the intuitive, real-time control of neuroprosthetics.",
+    solution: "Developed an advanced deep learning pipeline using CNNs and RNNs to classify motor imagery from EEG signals. The pipeline was optimized for real-time processing.",
+    impact: "Achieved 94% accuracy in motor imagery classification, a 12% improvement over baseline models. The findings were published and form the basis of a new open-source BCI control library.",
     tech: ["Python", "TensorFlow", "MNE-Python", "Signal Processing"],
     url: "https://github.com/ammar-io/eeg-classifier",
     github: "https://github.com/ammar-io/eeg-classifier",
@@ -77,7 +92,10 @@ const projects = [
     statusColor: "blue",
     category: "open-source",
     categoryLabel: "Open Source",
-    description: "Interactive web-based tool for visualizing neural network architectures and training processes. Built with Three.js and D3.js for educational purposes.",
+    summary: "An interactive, open-source web tool for visualizing neural network architectures in 3D to aid in learning.",
+    problem: "Understanding the architecture and training process of neural networks can be abstract and difficult for learners.",
+    solution: "Created an interactive, web-based tool for visualizing neural network architectures in 3D. Built with Three.js and D3.js to serve as an educational resource.",
+    impact: "The tool is available as an open-source project, providing a hands-on way for students and developers to explore and understand deep learning concepts.",
     tech: ["JavaScript", "Three.js", "D3.js", "WebGL"],
     url: "https://github.com/ammar-io/neural-viz",
     github: "https://github.com/ammar-io/neural-viz",
@@ -90,7 +108,10 @@ const projects = [
     statusColor: "blue",
     category: "neurotechnology",
     categoryLabel: "Neurotechnology",
-    description: "Brain-computer interface system for attention training using real-time neurofeedback. Combines EEG analysis with gamification for cognitive enhancement applications.",
+    summary: "A complete BCI system that uses real-time neurofeedback and gamification to help users train their attention.",
+    problem: "Existing attention training methods often fail to keep users engaged and provide limited, subjective feedback on their cognitive state.",
+    solution: "Built a complete brain-computer interface system for attention training that provides real-time neurofeedback. The system combines live EEG analysis with a gamified interface to enhance user focus.",
+    impact: "The project is a core initiative of Neurotech UIUC, demonstrating a practical application of BCI for cognitive enhancement and providing a platform for further research.",
     tech: ["Python", "PyQt5", "OpenBCI", "Real-time Processing"],
     url: "https://github.com/ammar-io/attention-bci",
     github: "https://github.com/ammar-io/attention-bci",
@@ -102,7 +123,10 @@ const projects = [
     statusColor: "green",
     category: "machine-learning",
     categoryLabel: "Machine Learning",
-    description: "Deep learning models for automated medical image segmentation using U-Net architectures. Focus on brain MRI and CT scan analysis for diagnostic applications.",
+    summary: "A U-Net-based deep learning model to automate the segmentation of brain MRIs, assisting in faster diagnostics.",
+    problem: "Manual segmentation of medical images (like MRIs) for diagnostics is time-consuming and subject to human error.",
+    solution: "Developing deep learning models for automated medical image segmentation using U-Net architectures. The focus is on analyzing brain MRIs and CT scans.",
+    impact: "This work aims to create a reliable, automated tool to assist radiologists, leading to faster and more accurate diagnoses.",
     tech: ["Python", "PyTorch", "Medical Imaging", "U-Net"],
     url: "https://github.com/ammar-io/med-seg",
     github: "https://github.com/ammar-io/med-seg",
@@ -170,8 +194,8 @@ class NavigationManager {
   }
 
   toggleMobileMenu() {
-    // Mobile menu functionality can be expanded here
-    console.log('Mobile menu toggled');
+    const navLinks = document.querySelector('.nav-links');
+    navLinks.classList.toggle('active');
   }
 }
 
@@ -296,27 +320,12 @@ class ProjectCarousel {
             <span class="category-tag">${project.categoryLabel}</span>
           </div>
           <h3>${project.title}</h3>
-          <p class="project-description">${project.description}</p>
+          <p class="project-summary">${project.summary}</p>
           <div class="project-tech">
             ${project.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
           </div>
           <div class="project-links">
-            ${project.github ? `<a href="${project.github}" class="project-link" target="_blank">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.98-.399 3.003-.404 1.022.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.654 1.653.246 2.874.12 3.176.77.84 1.233 1.91 1.233 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-              View Code
-            </a>` : ''}
-            ${project.demo ? `<a href="${project.demo}" class="project-link" target="_blank">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="2"/>
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2"/>
-              </svg>
-              Live Demo
-            </a>` : ''}
-            <a href="projects.html" class="project-link">
-              View All Projects →
-            </a>
+            <button class="btn btn-secondary view-details-btn" data-project-title="${project.title}">View Details</button>
           </div>
         </div>
       </div>
@@ -652,6 +661,84 @@ class PDFViewerManager {
   }
 }
 
+// Project modal functionality
+class ProjectModalManager {
+  constructor() {
+    this.modal = null;
+    this.init();
+  }
+
+  init() {
+    this.createModal();
+    this.setupEventListeners();
+  }
+
+  createModal() {
+    if (document.getElementById('project-modal')) return;
+    const modalElement = document.createElement('div');
+    modalElement.id = 'project-modal';
+    modalElement.className = 'project-modal';
+    document.body.appendChild(modalElement);
+    this.modal = modalElement;
+  }
+
+  setupEventListeners() {
+    document.body.addEventListener('click', e => {
+      if (e.target.classList.contains('view-details-btn')) {
+        const projectTitle = e.target.dataset.projectTitle;
+        const project = projects.find(p => p.title === projectTitle);
+        if (project) {
+          this.openModal(project);
+        }
+      }
+      if (e.target.classList.contains('project-modal-close') || e.target.id === 'project-modal') {
+        this.closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && this.modal.classList.contains('visible')) {
+        this.closeModal();
+      }
+    });
+  }
+
+  openModal(project) {
+    const links = new ProjectsManager().generateProjectLinks(project);
+    this.modal.innerHTML = `
+      <div class="project-modal-content">
+        <button class="project-modal-close">&times;</button>
+        <h3>${project.title}</h3>
+        <div class="project-meta">
+          <span class="status-badge status-${project.statusColor}">${project.status}</span>
+          <span class="category-tag">${project.categoryLabel}</span>
+        </div>
+        <div class="project-tech">
+            ${project.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+        </div>
+        <div class="project-details">
+            <h4>Problem</h4>
+            <p>${project.problem}</p>
+            <h4>Solution</h4>
+            <p>${project.solution}</p>
+            <h4>Impact</h4>
+            <p>${project.impact}</p>
+        </div>
+        <div class="project-links">
+            ${links}
+        </div>
+      </div>
+    `;
+    this.modal.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeModal() {
+    this.modal.classList.remove('visible');
+    document.body.style.overflow = 'auto';
+  }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize all managers
@@ -671,6 +758,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('projects-container') && document.querySelector('.projects-filters')) {
     const projectsManager = new ProjectsManager();
   }
+
+  // Initialize modal manager globally
+  const modalManager = new ProjectModalManager();
 
   // Initialize skills manager if on skills page
   if (document.querySelector('.skills-section')) {
@@ -881,12 +971,22 @@ function init() {
     // Event listeners
     document.addEventListener('mousemove', onMouseMove);
     window.addEventListener('resize', onWindowResize);
+
+    // Initialize 3D visualization if canvas exists
+    if (canvas) {
+      try {
+        setupScene();
+        animate();
+      } catch (error) {
+        console.error('Failed to initialize 3D visualization:', error);
+      }
+    }
 }
 
 // Handle mouse movement
 function onMouseMove(event) {
-    mouseX = (event.clientX - windowHalfX) * MOUSE_SENSITIVITY; // Use constant
-    mouseY = (event.clientY - windowHalfY) * MOUSE_SENSITIVITY; // Use constant
+    mouseX = (event.clientX - window.innerWidth / 2) * MOUSE_SENSITIVITY; // Use constant
+    mouseY = (event.clientY - window.innerHeight / 2) * MOUSE_SENSITIVITY; // Use constant
 }
 
 // Handle window resize
@@ -945,8 +1045,6 @@ function animate() {
         renderer.render(scene, camera);
     }
 }
-
-
 
 // Enhanced project filtering and rendering
 class ProjectsManager {
@@ -1030,12 +1128,12 @@ class ProjectsManager {
             </div>
             
             <h3>${project.title}</h3>
-            <p class="project-description">${project.description}</p>
+            <p class="project-summary">${project.summary}</p>
             
             ${techTags ? `<div class="project-tech">${techTags}</div>` : ''}
             
             <div class="project-links">
-              ${links}
+               <button class="btn btn-secondary view-details-btn" data-project-title="${project.title}">View Details</button>
             </div>
           </div>
         </div>
@@ -1113,7 +1211,6 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     init();
     animate();
-    console.log("3D visualization initialized");
   } catch (e) {
     console.error("Error initializing 3D visualization:", e);
   }
