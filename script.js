@@ -1,1223 +1,505 @@
-// Global variables
-let scene, camera, renderer, brain, connections;
-let mouseX = 0, mouseY = 0;
-let rotationVelocityX = 0, rotationVelocityY = 0;
-let animationFrame;
+// ============================================
+// PORTFOLIO WEBSITE JAVASCRIPT
+// ============================================
 
-// Animation parameters
-const MOUSE_SENSITIVITY = 0.003;
-const ACCELERATION_FACTOR = 0.003;
-const DAMPING_FACTOR = 0.97;
+// Global state
+let activeSection = 'home';
+let isMobileMenuOpen = false;
+let mousePosition = { x: 0, y: 0 };
 
-// Enhanced Project Data with categorization and filtering
-const projects = [
-  {
-    title: "MindSync",
-    status: "Prototyping",
-    statusColor: "blue",
-    category: "neurotechnology",
-    categoryLabel: "Neurotechnology",
-    summary: "An immersive VR neurofeedback system using real-time EEG data to help users improve attentional control.",
-    problem: "There's a need for more engaging, real-time feedback in cognitive therapy. Existing tools often lack direct, closed-loop interaction with a user's mental state.",
-    solution: "Engineered a closed-loop system using EEG for real-time emotional state detection. I integrated this with a custom VR environment in Unity that dynamically adjusts visual feedback, creating an immersive neurofeedback experience.",
-    impact: "The prototype successfully demonstrated the viability of using consumer-grade EEG hardware for real-time therapeutic feedback, laying the groundwork for future studies on attentional control.",
-    tech: ["C#", "Unity", "EEG", "VR", "UDP"],
-    url: "https://github.com/ammar-io/MindSync",
-    github: "https://github.com/ammar-io/MindSync",
-    featured: true
-  },
-  {
-    title: "Kalman Filter Cursor Tracker",
-    status: "Developing",
-    statusColor: "green",
-    category: "machine-learning",
-    categoryLabel: "Machine Learning",
-    summary: "A predictive cursor tracking system using a Kalman Filter to enhance human-computer interaction for accessibility.",
-    problem: "Standard cursor tracking can be imprecise. Predictive algorithms are needed to enhance human-computer interaction, especially for accessibility applications.",
-    solution: "Implemented a Kalman Filter using OpenCV and Python to predict cursor movement based on its current trajectory, smoothing motion and anticipating user intent.",
-    impact: "This predictive tracking system can be integrated into assistive technologies to create more fluid and less frustrating user experiences for individuals with motor impairments.",
-    tech: ["Python", "OpenCV", "Kalman Filter", "Computer Vision"],
-    url: "https://github.com/ammar-io/kalman-cursor",
-    github: "https://github.com/ammar-io/kalman-cursor",
-    featured: false
-  },
-  {
-    title: "Recycling Detection Bins",
-    status: "Prototyped",
-    statusColor: "purple",
-    category: "computer-vision",
-    categoryLabel: "Computer Vision",
-    summary: "A smart waste bin that uses a YOLO-V8 model to automatically identify and sort recyclable materials.",
-    problem: "Manual sorting of waste on the UIUC campus is inefficient and prone to error, leading to contamination in recycling streams.",
-    solution: "Trained and deployed a YOLO-V8 computer vision model to accurately detect and classify recyclable materials. This model controls a physical sorting mechanism on a smart waste bin.",
-    impact: "The system provides a low-cost, automated solution to improve recycling purity. It achieved 96% accuracy in tests and was presented at the university's engineering showcase.",
-    tech: ["Python", "YOLO-V8", "Computer Vision", "IoT"],
-    url: "https://github.com/ammar-io/RRR",
-    github: "https://github.com/ammar-io/RRR",
-    featured: true
-  },
-  {
-    title: "Blockchain Auditing System",
-    status: "Prototyped",
-    statusColor: "purple",
-    category: "research",
-    categoryLabel: "Research",
-    summary: "A novel auditing system using Zero-Knowledge Proofs to drastically accelerate the validation of digital assets on a blockchain.",
-    problem: "Auditing digital assets on a blockchain is computationally expensive and slow, creating a bottleneck for financial analysis and verification.",
-    solution: "Utilized Zero-Knowledge Proofs (ZKPs) to develop a state-of-the-art blockchain auditing system. The system, built with Python, Circom, and Snark.js, enables rapid validation of digital assets.",
-    impact: "This research demonstrates a novel method for significantly accelerating blockchain analysis, with potential applications in fintech and secure, private transactions.",
-    tech: ["Python", "Circom", "JavaScript", "Zero-Knowledge Proofs"],
-    url: "https://github.com/ammar-io/Blockchain-Auditor",
-    github: "https://github.com/ammar-io/Blockchain-Auditor",
-    featured: false
-  },
-  {
-    title: "EEG Signal Classification Pipeline",
-    status: "Published",
-    statusColor: "green",
-    category: "neurotechnology",
-    categoryLabel: "Neurotechnology",
-    summary: "A deep learning pipeline that classifies motor imagery from EEG signals with 94% accuracy for BCI applications.",
-    problem: "High latency and low accuracy in existing Brain-Computer Interface (BCI) systems hinder the intuitive, real-time control of neuroprosthetics.",
-    solution: "Developed an advanced deep learning pipeline using CNNs and RNNs to classify motor imagery from EEG signals. The pipeline was optimized for real-time processing.",
-    impact: "Achieved 94% accuracy in motor imagery classification, a 12% improvement over baseline models. The findings were published and form the basis of a new open-source BCI control library.",
-    tech: ["Python", "TensorFlow", "MNE-Python", "Signal Processing"],
-    url: "https://github.com/ammar-io/eeg-classifier",
-    github: "https://github.com/ammar-io/eeg-classifier",
-    featured: true
-  },
-  {
-    title: "Neural Network Visualization Tool",
-    status: "Open Source",
-    statusColor: "blue",
-    category: "open-source",
-    categoryLabel: "Open Source",
-    summary: "An interactive, open-source web tool for visualizing neural network architectures in 3D to aid in learning.",
-    problem: "Understanding the architecture and training process of neural networks can be abstract and difficult for learners.",
-    solution: "Created an interactive, web-based tool for visualizing neural network architectures in 3D. Built with Three.js and D3.js to serve as an educational resource.",
-    impact: "The tool is available as an open-source project, providing a hands-on way for students and developers to explore and understand deep learning concepts.",
-    tech: ["JavaScript", "Three.js", "D3.js", "WebGL"],
-    url: "https://github.com/ammar-io/neural-viz",
-    github: "https://github.com/ammar-io/neural-viz",
-    demo: "https://ammar-io.github.io/neural-viz",
-    featured: false
-  },
-  {
-    title: "Attention Training BCI",
-    status: "Research",
-    statusColor: "blue",
-    category: "neurotechnology",
-    categoryLabel: "Neurotechnology",
-    summary: "A complete BCI system that uses real-time neurofeedback and gamification to help users train their attention.",
-    problem: "Existing attention training methods often fail to keep users engaged and provide limited, subjective feedback on their cognitive state.",
-    solution: "Built a complete brain-computer interface system for attention training that provides real-time neurofeedback. The system combines live EEG analysis with a gamified interface to enhance user focus.",
-    impact: "The project is a core initiative of Neurotech UIUC, demonstrating a practical application of BCI for cognitive enhancement and providing a platform for further research.",
-    tech: ["Python", "PyQt5", "OpenBCI", "Real-time Processing"],
-    url: "https://github.com/ammar-io/attention-bci",
-    github: "https://github.com/ammar-io/attention-bci",
-    featured: true
-  },
-  {
-    title: "Medical Image Segmentation",
-    status: "Developing",
-    statusColor: "green",
-    category: "machine-learning",
-    categoryLabel: "Machine Learning",
-    summary: "A U-Net-based deep learning model to automate the segmentation of brain MRIs, assisting in faster diagnostics.",
-    problem: "Manual segmentation of medical images (like MRIs) for diagnostics is time-consuming and subject to human error.",
-    solution: "Developing deep learning models for automated medical image segmentation using U-Net architectures. The focus is on analyzing brain MRIs and CT scans.",
-    impact: "This work aims to create a reliable, automated tool to assist radiologists, leading to faster and more accurate diagnoses.",
-    tech: ["Python", "PyTorch", "Medical Imaging", "U-Net"],
-    url: "https://github.com/ammar-io/med-seg",
-    github: "https://github.com/ammar-io/med-seg",
-    featured: false
-  }
-];
+// ============================================
+// THEME SWITCHER
+// ============================================
 
-// Dark mode functionality
-class DarkModeManager {
-  constructor() {
-    this.isDark = localStorage.getItem('darkMode') === 'true';
-    this.toggle = document.getElementById('dark-mode-toggle');
-    this.init();
-  }
-
-  init() {
-    this.applyTheme();
-    if (this.toggle) {
-      this.toggle.addEventListener('click', () => this.toggleTheme());
-    }
-  }
-
-  toggleTheme() {
-    this.isDark = !this.isDark;
-    localStorage.setItem('darkMode', this.isDark);
-    this.applyTheme();
-    this.updateNeuralVisualization();
-  }
-
-  applyTheme() {
-    document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
-  }
-
-  updateNeuralVisualization() {
-    if (renderer) {
-      const bgColor = this.isDark ? '#131C2E' : '#F8F9FB'; /* Updated to accurate palette */
-      renderer.setClearColor(bgColor, 1);
-    }
-  }
-}
-
-// Navigation scroll effect
-class NavigationManager {
-  constructor() {
-    this.nav = document.getElementById('global-nav');
-    this.mobileToggle = document.getElementById('mobile-menu-toggle');
-    this.init();
-  }
-
-  init() {
-    window.addEventListener('scroll', () => this.handleScroll());
-    if (this.mobileToggle) {
-      this.mobileToggle.addEventListener('click', () => this.toggleMobileMenu());
-    }
-  }
-
-  handleScroll() {
-    if (this.nav) {
-      if (window.scrollY > 50) {
-        this.nav.classList.add('scrolled');
-      } else {
-        this.nav.classList.remove('scrolled');
-      }
-    }
-  }
-
-  toggleMobileMenu() {
-    const navLinks = document.querySelector('.nav-links');
-    navLinks.classList.toggle('active');
-  }
-}
-
-// Animated counter for stats
-class StatCounter {
-  constructor(element, target, duration = 2000) {
-    this.element = element;
-    this.target = target;
-    this.duration = duration;
-    this.current = 0;
-    this.increment = target / (duration / 16);
-    this.isAnimating = false;
-  }
-
-  animate() {
-    if (this.isAnimating) return;
-    this.isAnimating = true;
-
-    const updateCounter = () => {
-      if (this.current < this.target) {
-        this.current += this.increment;
-        if (this.current > this.target) this.current = this.target;
-        this.element.textContent = Math.floor(this.current);
-        requestAnimationFrame(updateCounter);
-      } else {
-        this.isAnimating = false;
-      }
-    };
-
-    updateCounter();
-  }
-}
-
-// Stats animation manager
-class StatsManager {
-  constructor() {
-    this.statsSection = document.querySelector('.stats-section');
-    this.statItems = document.querySelectorAll('.stat-item');
-    this.counters = [];
-    this.hasAnimated = false;
-    this.init();
-  }
-
-  init() {
-    this.statItems.forEach(item => {
-      const numberElement = item.querySelector('.stat-number');
-      const target = parseInt(item.dataset.count) || 0;
-      if (numberElement && target > 0) {
-        this.counters.push(new StatCounter(numberElement, target));
-      }
-    });
-
-    this.setupIntersectionObserver();
-  }
-
-  setupIntersectionObserver() {
-    if (!this.statsSection) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !this.hasAnimated) {
-          this.animateStats();
-          this.hasAnimated = true;
-        }
-      });
-    }, { threshold: 0.5 });
-
-    observer.observe(this.statsSection);
-  }
-
-  animateStats() {
-    this.counters.forEach((counter, index) => {
-      setTimeout(() => {
-        counter.animate();
-      }, index * 200);
-    });
-  }
-}
-
-// Project carousel functionality
-class ProjectCarousel {
-  constructor() {
-    this.carousel = document.querySelector('.project-carousel');
-    this.track = document.getElementById('carousel-track');
-    this.prevBtn = document.getElementById('carousel-prev');
-    this.nextBtn = document.getElementById('carousel-next');
-    this.dotsContainer = document.getElementById('carousel-dots');
-    
-    this.currentSlide = 0;
-    this.projects = [];
-    
-    this.init();
-  }
-
-  init() {
-    this.loadProjects();
-    this.setupEventListeners();
-    this.createDots();
-    this.updateCarousel();
-  }
-
-  loadProjects() {
-    // Use featured projects from the main projects array
-    this.projects = projects.filter(project => project.featured).slice(0, 4);
-    
-    // If no featured projects, use the first 3 projects
-    if (this.projects.length === 0) {
-      this.projects = projects.slice(0, 3);
+function initializeTheme() {
+    const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', toggleTheme);
     }
 
-    this.renderProjects();
-  }
-
-  renderProjects() {
-    if (!this.track) return;
-
-    this.track.innerHTML = this.projects.map(project => `
-      <div class="project-card">
-        <div class="project-content">
-          <div class="project-meta">
-            <span class="status-badge status-${project.statusColor}">${project.status}</span>
-            <span class="category-tag">${project.categoryLabel}</span>
-          </div>
-          <h3>${project.title}</h3>
-          <p class="project-summary">${project.summary}</p>
-          <div class="project-tech">
-            ${project.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
-          </div>
-          <div class="project-links">
-            <button class="btn btn-secondary view-details-btn" data-project-title="${project.title}">View Details</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  setupEventListeners() {
-    if (this.prevBtn) {
-      this.prevBtn.addEventListener('click', () => this.previousSlide());
-    }
-    if (this.nextBtn) {
-      this.nextBtn.addEventListener('click', () => this.nextSlide());
-    }
-
-    // Auto-advance carousel
-    setInterval(() => {
-      this.nextSlide();
-    }, 5000);
-  }
-
-  createDots() {
-    if (!this.dotsContainer) return;
-
-    this.dotsContainer.innerHTML = this.projects.map((_, index) => 
-      `<div class="carousel-dot ${index === 0 ? 'active' : ''}" data-slide="${index}"></div>`
-    ).join('');
-
-    this.dotsContainer.addEventListener('click', (e) => {
-      if (e.target.classList.contains('carousel-dot')) {
-        this.goToSlide(parseInt(e.target.dataset.slide));
-      }
-    });
-  }
-
-  previousSlide() {
-    this.currentSlide = this.currentSlide === 0 ? this.projects.length - 1 : this.currentSlide - 1;
-    this.updateCarousel();
-  }
-
-  nextSlide() {
-    this.currentSlide = this.currentSlide === this.projects.length - 1 ? 0 : this.currentSlide + 1;
-    this.updateCarousel();
-  }
-
-  goToSlide(index) {
-    this.currentSlide = index;
-    this.updateCarousel();
-  }
-
-  updateCarousel() {
-    if (this.track) {
-      this.track.style.transform = `translateX(-${this.currentSlide * 100}%)`;
-    }
-
-    // Update dots
-    const dots = this.dotsContainer?.querySelectorAll('.carousel-dot');
-    if (dots) {
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === this.currentSlide);
-      });
-    }
-  }
-}
-
-// Neural visualization with Three.js
-class NeuralVisualization {
-  constructor() {
-    this.canvas = document.getElementById('neural-canvas');
-    this.darkMode = new DarkModeManager();
-    this.init();
-  }
-
-  init() {
-    if (!this.canvas) return;
-
-    this.setupScene();
-    this.createNeuralNetwork();
-    this.setupEventListeners();
-    this.animate();
-  }
-
-  setupScene() {
-    // Scene setup
-    scene = new THREE.Scene();
-    
-    // Camera
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 10;
-
-    // Renderer
-    renderer = new THREE.WebGLRenderer({ 
-      canvas: this.canvas,
-      alpha: true,
-      antialias: true
-    });
-    
-    const bgColor = this.darkMode.isDark ? '#131C2E' : '#F8F9FB'; /* Updated to accurate palette */
-    renderer.setClearColor(bgColor, 1);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-  }
-
-  createNeuralNetwork() {
-    // Create nodes
-    const nodeGeometry = new THREE.SphereGeometry(0.05, 16, 16);
-    const nodeMaterial = new THREE.MeshBasicMaterial({ 
-      color: this.darkMode.isDark ? '#6EA5CC' : '#6EA5CC', /* Accurate Azul Macaubas for both themes */
-      transparent: true,
-      opacity: 0.8
-    });
-
-    const nodes = new THREE.Group();
-    const nodePositions = [];
-
-    // Create random node positions
-    for (let i = 0; i < 100; i++) {
-      const theta = Math.random() * 2 * Math.PI;
-      const phi = Math.acos(2 * Math.random() - 1);
-      const radius = 3 + Math.random() * 2;
-
-      const x = radius * Math.sin(phi) * Math.cos(theta);
-      const y = radius * Math.sin(phi) * Math.sin(theta);
-      const z = radius * Math.cos(phi);
-
-      const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-      node.position.set(x, y, z);
-      nodes.add(node);
-      nodePositions.push(new THREE.Vector3(x, y, z));
-    }
-
-    scene.add(nodes);
-    this.nodes = nodes;
-
-    // Create connections
-    this.createConnections(nodePositions);
-  }
-
-  createConnections(positions) {
-    const connectionGeometry = new THREE.BufferGeometry();
-    const connectionVertices = [];
-
-    // Create connections between nearby nodes
-    for (let i = 0; i < positions.length; i++) {
-      for (let j = i + 1; j < positions.length; j++) {
-        const distance = positions[i].distanceTo(positions[j]);
-        if (distance < 2 && Math.random() > 0.7) {
-          connectionVertices.push(
-            positions[i].x, positions[i].y, positions[i].z,
-            positions[j].x, positions[j].y, positions[j].z
-          );
-        }
-      }
-    }
-
-    connectionGeometry.setAttribute('position', new THREE.Float32BufferAttribute(connectionVertices, 3));
-    
-    const connectionMaterial = new THREE.LineBasicMaterial({
-      color: this.darkMode.isDark ? '#6EA5CC' : '#6EA5CC', /* Accurate Azul Macaubas for both themes */
-      transparent: true,
-      opacity: 0.3
-    });
-
-    connections = new THREE.LineSegments(connectionGeometry, connectionMaterial);
-    scene.add(connections);
-  }
-
-  setupEventListeners() {
-    window.addEventListener('mousemove', (event) => this.onMouseMove(event));
-    window.addEventListener('resize', () => this.onWindowResize());
-  }
-
-  onMouseMove(event) {
-    mouseX = (event.clientX - window.innerWidth / 2) * MOUSE_SENSITIVITY;
-    mouseY = (event.clientY - window.innerHeight / 2) * MOUSE_SENSITIVITY;
-  }
-
-  onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-
-  animate() {
-    animationFrame = requestAnimationFrame(() => this.animate());
-
-    // Update rotation based on mouse movement
-    rotationVelocityX += (mouseY - rotationVelocityX) * ACCELERATION_FACTOR;
-    rotationVelocityY += (mouseX - rotationVelocityY) * ACCELERATION_FACTOR;
-
-    rotationVelocityX *= DAMPING_FACTOR;
-    rotationVelocityY *= DAMPING_FACTOR;
-
-    if (this.nodes) {
-      this.nodes.rotation.x += rotationVelocityX;
-      this.nodes.rotation.y += rotationVelocityY;
-    }
-
-    if (connections) {
-      connections.rotation.x += rotationVelocityX;
-      connections.rotation.y += rotationVelocityY;
-    }
-
-    renderer.render(scene, camera);
-  }
-}
-
-// Fade-in animation for elements
-class FadeInManager {
-  constructor() {
-    this.elements = document.querySelectorAll('.fade-in');
-    this.init();
-  }
-
-  init() {
-    this.setupIntersectionObserver();
-  }
-
-  setupIntersectionObserver() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    this.elements.forEach(element => {
-      observer.observe(element);
-    });
-  }
-}
-
-// Skills Animation Manager
-class SkillsManager {
-  constructor() {
-    this.skillItems = document.querySelectorAll('.skill-item');
-    this.hasAnimated = false;
-    this.init();
-  }
-
-  init() {
-    this.setupIntersectionObserver();
-  }
-
-  setupIntersectionObserver() {
-    if (this.skillItems.length === 0) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !this.hasAnimated) {
-          this.animateSkillBars();
-          this.hasAnimated = true;
-        }
-      });
-    }, { threshold: 0.3 });
-
-    // Observe the first skill item to trigger animation
-    if (this.skillItems[0]) {
-      observer.observe(this.skillItems[0]);
-    }
-  }
-
-  animateSkillBars() {
-    this.skillItems.forEach((item, index) => {
-      const progressBar = item.querySelector('.skill-progress');
-      const level = item.dataset.level;
-      
-      if (progressBar && level) {
-        setTimeout(() => {
-          progressBar.style.width = `${level}%`;
-        }, index * 100);
-      }
-    });
-  }
-}
-
-// PDF Viewer Manager for Resume Page
-class PDFViewerManager {
-  constructor() {
-    this.iframe = document.getElementById('pdf-iframe');
-    this.fallback = document.querySelector('.pdf-fallback');
-    this.init();
-  }
-
-  init() {
-    if (!this.iframe || !this.fallback) return;
-
-    // Set a timeout to check if PDF loaded
-    const loadTimeout = setTimeout(() => {
-      this.showFallback();
-    }, 5000);
-
-    // Check if iframe loads successfully
-    this.iframe.addEventListener('load', () => {
-      clearTimeout(loadTimeout);
-      try {
-        // Try to access iframe content to see if PDF loaded
-        const iframeDoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
-        if (!iframeDoc || iframeDoc.querySelector('embed') === null) {
-          this.showFallback();
-        }
-      } catch (e) {
-        // Cross-origin restriction or other error - PDF might still work
-        console.log('PDF iframe loaded, but cannot verify content due to browser restrictions');
-      }
-    });
-
-    // Handle iframe error
-    this.iframe.addEventListener('error', () => {
-      clearTimeout(loadTimeout);
-      this.showFallback();
-    });
-
-    // Add additional checks for mobile devices
-    if (this.isMobileDevice()) {
-      setTimeout(() => {
-        this.showFallback();
-      }, 2000);
-    }
-  }
-
-  showFallback() {
-    if (this.iframe) {
-      this.iframe.style.display = 'none';
-    }
-    if (this.fallback) {
-      this.fallback.style.display = 'block';
-    }
-  }
-
-  isMobileDevice() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  }
-}
-
-// Project modal functionality
-class ProjectModalManager {
-  constructor() {
-    this.modal = null;
-    this.init();
-  }
-
-  init() {
-    this.createModal();
-    this.setupEventListeners();
-  }
-
-  createModal() {
-    let modalElement = document.getElementById('project-modal');
-    if (!modalElement) {
-        modalElement = document.createElement('div');
-        modalElement.id = 'project-modal';
-        modalElement.className = 'project-modal';
-        document.body.appendChild(modalElement);
-    }
-    this.modal = modalElement;
-  }
-
-  setupEventListeners() {
-    document.body.addEventListener('click', e => {
-      if (e.target.classList.contains('view-details-btn')) {
-        const projectTitle = e.target.dataset.projectTitle;
-        const project = projects.find(p => p.title === projectTitle);
-        if (project) {
-          this.openModal(project);
-        }
-      }
-      if (e.target.classList.contains('project-modal-close') || e.target.id === 'project-modal') {
-        this.closeModal();
-      }
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && this.modal.classList.contains('visible')) {
-        this.closeModal();
-      }
-    });
-  }
-
-  openModal(project) {
-    const links = new ProjectsManager().generateProjectLinks(project);
-    this.modal.innerHTML = `
-      <div class="project-modal-content">
-        <button class="project-modal-close">&times;</button>
-        <h3>${project.title}</h3>
-        <div class="project-meta">
-          <span class="status-badge status-${project.statusColor}">${project.status}</span>
-          <span class="category-tag">${project.categoryLabel}</span>
-        </div>
-        <div class="project-tech">
-            ${project.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
-        </div>
-        <div class="project-details">
-            <h4>Problem</h4>
-            <p>${project.problem}</p>
-            <h4>Solution</h4>
-            <p>${project.solution}</p>
-            <h4>Impact</h4>
-            <p>${project.impact}</p>
-        </div>
-        <div class="project-links">
-            ${links}
-        </div>
-      </div>
-    `;
-    this.modal.classList.add('visible');
-    document.body.style.overflow = 'hidden';
-  }
-
-  closeModal() {
-    this.modal.classList.remove('visible');
-    document.body.style.overflow = 'auto';
-  }
-}
-
-// Initialize everything when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  // Initialize all managers
-  const darkMode = new DarkModeManager();
-  const navigation = new NavigationManager();
-  const stats = new StatsManager();
-  const carousel = new ProjectCarousel();
-  const neural = new NeuralVisualization();
-  const fadeIn = new FadeInManager();
-
-  // Initialize PDF viewer if on resume page
-  if (document.getElementById('pdf-iframe')) {
-    const pdfViewer = new PDFViewerManager();
-  }
-
-  // Initialize projects manager if on projects page
-  if (document.getElementById('projects-container') && document.querySelector('.projects-filters')) {
-    const projectsManager = new ProjectsManager();
-  }
-
-  // Initialize modal manager globally
-  const modalManager = new ProjectModalManager();
-
-  // Initialize skills manager if on skills page
-  if (document.querySelector('.skills-section')) {
-    const skillsManager = new SkillsManager();
-  }
-
-  // Smooth scrolling for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    });
-  });
-
-  // Add loading state removal
-  window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-  });
-});
-
-// Export for potential module use
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    DarkModeManager,
-    NavigationManager,
-    StatsManager,
-    ProjectCarousel,
-    NeuralVisualization,
-    FadeInManager
-  };
-}
-
-// Legacy init function for compatibility
-function init() {
-    // Scene setup
-    scene = new THREE.Scene();
-    
-    // Canvas element
-    const canvas = document.querySelector('#canvas');
-    
-    // Check if canvas exists
-    if (!canvas) {
-        console.error("Canvas element not found!");
+    // Check for saved theme in local storage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        applyTheme(savedTheme);
         return;
     }
 
-    // Set a dark background (like on hys-inc.jp)
-    renderer = new THREE.WebGLRenderer({ 
-        canvas: canvas,
-        alpha: true,  // allow transparency so CSS shows through
-        antialias: true
-    });
-    renderer.setClearColor('#F8F9FB', 1); // Set to match new background color
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-    // Create brain-like geometry
-    const geometry = new THREE.BufferGeometry();
-    const vertices = [];
-    const radius = 5; // Slightly smaller for better proportion
-
-    // Shape parameters
-    const NUM_POINTS = 2000;
-
-    // Create sphere geometry points
-    for (let i = 0; i < NUM_POINTS; i++) {
-        const theta = Math.random() * 2 * Math.PI;
-        // Use random cosine for uniform distribution on a sphere
-        const phi = Math.acos(2 * Math.random() - 1);
-
-        const x = radius * Math.sin(phi) * Math.cos(theta);
-        const y = radius * Math.sin(phi) * Math.sin(theta);
-        const z = radius * Math.cos(phi);
-
-        vertices.push(x, y, z);
+    // If no saved theme, check for user's OS preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        applyTheme('dark');
+    } else {
+        applyTheme('light');
     }
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+}
 
-    // After setting attributes on geometry, store a copy of the original positions:
-    geometry.userData.originalPositions = geometry.attributes.position.array.slice();
+function applyTheme(theme) {
+    const sunIcon = document.querySelector('.sun-icon');
+    const moonIcon = document.querySelector('.moon-icon');
 
-    // Create circle texture (using a soft white circle)
-    const circleTexture = createCircleTexture();
-
-    // Use subtle points to match the minimalist aesthetic
-    const pointMaterial = new THREE.PointsMaterial({
-        map: circleTexture,
-        alphaTest: 0.5,
-        color: '#6EA5CC', // Accurate Azul Macaubas for dots
-        size: 0.05, // smaller dots for cleaner look
-        transparent: true,
-        opacity: 0.8,
-        sizeAttenuation: true,
-        depthWrite: false
-    });
-
-    brain = new THREE.Points(geometry, pointMaterial);
-    scene.add(brain);
-
-    // Create connections between points with subtle lines
-    const lineGeometry = new THREE.BufferGeometry();
-    const lineVertices = [];
-    
-    // Track which nodes have connections
-    const connectedNodes = new Set();
-    
-    // Parameters for connections
-    const MAX_CONNECTIONS = 2000; // Increased for better connectivity
-    const MIN_DISTANCE = 2;
-    const MAX_DISTANCE = 6;
-    let connectionCount = 0;
-    
-    // First pass: create randomized connections
-    for (let i = 0; i < vertices.length; i += 3) {
-        if (connectionCount >= MAX_CONNECTIONS) break;
-        
-        // Number of connections for this node (1-3)
-        const numConnections = Math.floor(Math.random() * 3) + 1;
-        let nodeConnections = 0;
-        
-        // Try to create the desired number of connections
-        for (let attempt = 0; attempt < 10 && nodeConnections < numConnections; attempt++) {
-            // Pick a random node to connect to
-            const j = Math.floor(Math.random() * (vertices.length / 3)) * 3;
-            
-            // Skip self-connections
-            if (i === j) continue;
-            
-            const dx = vertices[i] - vertices[j];
-            const dy = vertices[i + 1] - vertices[j + 1];
-            const dz = vertices[i + 2] - vertices[j + 2];
-            const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-            
-            if (distance > MIN_DISTANCE && distance < MAX_DISTANCE) {
-                lineVertices.push(
-                    vertices[i], vertices[i + 1], vertices[i + 2],
-                    vertices[j], vertices[j + 1], vertices[j + 2]
-                );
-                connectionCount++;
-                nodeConnections++;
-                
-                // Mark both nodes as connected
-                connectedNodes.add(Math.floor(i/3));
-                connectedNodes.add(Math.floor(j/3));
-                
-                if (connectionCount >= MAX_CONNECTIONS) break;
-            }
-        }
+    if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (sunIcon) sunIcon.classList.add('hidden');
+        if (moonIcon) moonIcon.classList.remove('hidden');
+    } else {
+        document.body.classList.remove('dark-mode');
+        if (sunIcon) sunIcon.classList.remove('hidden');
+        if (moonIcon) moonIcon.classList.add('hidden');
     }
+    localStorage.setItem('theme', theme);
+}
+
+function toggleTheme() {
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(newTheme);
+}
+
+// ============================================
+// INITIALIZATION
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeLucideIcons();
+    initializeTheme(); // Initialize theme before other components
+    // Single optimized scroll handler replaces individual listeners
+    updateActiveSection();
+    updateScrollProgress();
+    handleScrollEffects();
+    initializeIntersectionObserver();
+    initializeNavigation();
+    // Minimalist: no parallax/mouse tracking
+});
+
+// Initialize Lucide icons
+function initializeLucideIcons() {
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}
+
+// ============================================
+// NAVIGATION
+// ============================================
+
+function scrollToSection(sectionId) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Close mobile menu if open
+    if (isMobileMenuOpen) {
+        toggleMobileMenu();
+    }
+}
+
+function toggleMobileMenu() {
+    isMobileMenuOpen = !isMobileMenuOpen;
+
+    const mobileMenu = document.querySelector('.nav-mobile');
+    const menuIcon = document.querySelector('.menu-icon');
+    const closeIcon = document.querySelector('.close-icon');
+
+    if (isMobileMenuOpen) {
+        mobileMenu.classList.remove('hidden');
+        menuIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+    } else {
+        mobileMenu.classList.add('hidden');
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+    }
+}
+
+// ============================================
+// SCROLL PROGRESS
+// ============================================
+
+function initializeScrollProgress() { /* replaced by optimized handler */ }
+
+function updateScrollProgress() {
+    const scrollProgress = document.querySelector('.scroll-progress-bar');
+    if (!scrollProgress) return;
     
-    // Second pass: ensure each node has at least one connection
-    for (let i = 0; i < vertices.length / 3; i++) {
-        if (!connectedNodes.has(i) && connectionCount < MAX_CONNECTIONS) {
-            // Find the nearest node to connect to
-            let minDistance = Infinity;
-            let nearestNode = -1;
-            
-            const baseIndex = i * 3;
-            for (let j = 0; j < vertices.length / 3; j++) {
-                if (i === j) continue;
-                
-                const targetIndex = j * 3;
-                const dx = vertices[baseIndex] - vertices[targetIndex];
-                const dy = vertices[baseIndex + 1] - vertices[targetIndex + 1];
-                const dz = vertices[baseIndex + 2] - vertices[targetIndex + 2];
-                const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                
-                if (distance < minDistance && distance > MIN_DISTANCE) {
-                    minDistance = distance;
-                    nearestNode = j;
+    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const currentProgress = Math.min((window.scrollY / totalHeight) * 100, 100);
+    
+    scrollProgress.style.width = `${currentProgress}%`;
+}
+
+// ============================================
+// ACTIVE SECTION TRACKING
+// ============================================
+
+function initializeActiveSection() { /* replaced by optimized handler */ }
+
+function updateActiveSection() {
+    const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
+    const scrollPosition = window.scrollY + 100;
+    
+    for (const sectionId of sections) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            const { offsetTop, offsetHeight } = element;
+            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                if (activeSection !== sectionId) {
+                    activeSection = sectionId;
+                    updateActiveNavigation();
                 }
-            }
-            
-            if (nearestNode >= 0) {
-                const targetIndex = nearestNode * 3;
-                lineVertices.push(
-                    vertices[baseIndex], vertices[baseIndex + 1], vertices[baseIndex + 2],
-                    vertices[targetIndex], vertices[targetIndex + 1], vertices[targetIndex + 2]
-                );
-                connectionCount++;
-                connectedNodes.add(i);
-                connectedNodes.add(nearestNode);
+                break;
             }
         }
     }
+}
 
-    lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(lineVertices, 3));
-    const lineMaterial = new THREE.LineBasicMaterial({
-        color: '#6EA5CC', // Accurate Azul Macaubas for connections
-        transparent: true,
-        opacity: 0.04, // very subtle connections
-        linewidth: 1,
+function updateActiveNavigation() {
+    // Update desktop navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        const section = item.getAttribute('data-section');
+        if (section === activeSection) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
     });
-    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-    scene.add(lines);
-
-    // Position camera
-    camera.position.z = 10;
-
-    // Event listeners
-    document.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('resize', onWindowResize);
-
-    // Initialize 3D visualization if canvas exists
-    if (canvas) {
-      try {
-        setupScene();
-        animate();
-      } catch (error) {
-        console.error('Failed to initialize 3D visualization:', error);
-      }
-    }
-}
-
-// Handle mouse movement
-function onMouseMove(event) {
-    mouseX = (event.clientX - window.innerWidth / 2) * MOUSE_SENSITIVITY; // Use constant
-    mouseY = (event.clientY - window.innerHeight / 2) * MOUSE_SENSITIVITY; // Use constant
-}
-
-// Handle window resize
-function onWindowResize() {
-    windowHalfX = window.innerWidth / 2;
-    windowHalfY = window.innerHeight / 2;
     
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-// Animation loop
-function animate() {
-    requestAnimationFrame(animate);
-
-    // Physics-based rotation for smoother and more dynamic interaction
-    if (brain) {
-        // Add a slow, constant rotation
-        brain.rotation.x += 0.0000002;
-        brain.rotation.y += 0.0000003;
-
-        // Calculate acceleration towards the target rotation (mouseX, mouseY are target offsets)
-        // Invert mouse input for inverse rotation
-        const accelX = (-mouseY - brain.rotation.x) * ACCELERATION_FACTOR; // Target is -mouseY for x-rotation
-        const accelY = (-mouseX - brain.rotation.y) * ACCELERATION_FACTOR; // Target is -mouseX for y-rotation
-
-        // Update velocities
-        rotationVelocityX += accelX;
-        rotationVelocityY += accelY;
-
-        // Apply damping to velocities
-        rotationVelocityX *= DAMPING_FACTOR;
-        rotationVelocityY *= DAMPING_FACTOR;
-
-        // Update brain rotation
-        brain.rotation.x += rotationVelocityX;
-        brain.rotation.y += rotationVelocityY;
-        
-        // Subtle pulsing effect
-        const scale = 1 + Math.sin(Date.now() * 0.001) * 0.03; // More subtle pulse
-        brain.scale.set(scale, scale, scale);
-
-        // Subtle shake effect
-        const shakeAmplitude = 0.015; // Reduced amplitude
-        const positions = brain.geometry.attributes.position.array;
-        const originalPositions = brain.geometry.userData.originalPositions;
-        const time = Date.now() * 0.003;
-        for (let i = 0; i < positions.length; i++) {
-            positions[i] = originalPositions[i] + shakeAmplitude * Math.sin(time + i * 0.1);
+    // Update mobile navigation
+    const mobileNavItems = document.querySelectorAll('.nav-item-mobile');
+    mobileNavItems.forEach(item => {
+        const section = item.getAttribute('data-section');
+        if (section === activeSection) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
         }
-        brain.geometry.attributes.position.needsUpdate = true;
+    });
+}
+
+function initializeNavigation() {
+    const navButtons = document.querySelectorAll('.nav-item, .nav-item-mobile, .logo-button, .scroll-indicator, .btn-primary, .btn-outline');
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const sectionId = button.getAttribute('data-section');
+            if (sectionId) {
+                scrollToSection(sectionId);
+            }
+        });
+    });
+
+    const mobileMenuButton = document.querySelector('.mobile-menu-btn');
+    if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', toggleMobileMenu);
     }
 
-    if (renderer && scene && camera) {
-        renderer.render(scene, camera);
+    const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleFormSubmit);
     }
 }
 
-// Enhanced project filtering and rendering
-class ProjectsManager {
-  constructor() {
-    this.projectsContainer = document.getElementById("projects-container");
-    this.filterBtns = document.querySelectorAll(".filter-btn");
-    this.currentFilter = "all";
-    this.init();
-  }
+// ============================================
+// SCROLL EFFECTS
+// ============================================
 
-  init() {
-    this.renderProjects();
-    this.setupFilters();
-  }
+function initializeScrollEffects() { /* replaced by optimized handler */ }
 
-  // Function to get project background images
-  getProjectImage(projectTitle) {
-    const imageMap = {
-      "MindSync": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=center",
-      "Kalman Filter Cursor Tracker": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=center", 
-      "Recycling Detection Bins": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&h=300&fit=crop&crop=center",
-      "Blockchain Auditing System": "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=300&fit=crop&crop=center",
-      "EEG Signal Classification Pipeline": "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=400&h=300&fit=crop&crop=center",
-      "Neural Network Visualization Tool": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop&crop=center",
-      "Attention Training BCI": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=center",
-      "Medical Image Segmentation": "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=400&h=300&fit=crop&crop=center"
+function handleScrollEffects() {
+    const header = document.querySelector('.header');
+    const isScrolled = window.scrollY > 50;
+    
+    if (isScrolled) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+}
+
+// ============================================
+// MOUSE TRACKING FOR HERO ANIMATIONS
+// ============================================
+
+function initializeMouseTracking() {
+    // disabled
+}
+
+function handleMouseMove(e) {
+    mousePosition.x = e.clientX;
+    mousePosition.y = e.clientY;
+    
+    // disabled
+}
+
+function updateHeroWaves() {
+    // disabled
+}
+
+// ============================================
+// CONTACT FORM
+// ============================================
+
+async function handleFormSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.innerHTML;
+
+    submitButton.disabled = true;
+    submitButton.innerHTML = `
+        <i data-lucide="loader-2" class="animate-spin"></i>
+        Sending...
+    `;
+    lucide.createIcons();
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+        // In a real-world application, you would send this data to a backend service.
+        // For example, using fetch() to POST to an API endpoint:
+        //
+        // const response = await fetch('/api/contact', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(data),
+        // });
+        // if (!response.ok) throw new Error('Network response was not ok.');
+        
+        console.log('Form submitted:', data);
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
+
+        showFormFeedback('Thank you! Your message has been sent successfully.', 'success');
+        form.reset();
+    } catch (error) {
+        console.error('Form submission error:', error);
+        showFormFeedback('Sorry, something went wrong. Please try again.', 'error');
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
+        lucide.createIcons();
+    }
+}
+
+function showFormFeedback(message, type) {
+    const feedbackElement = document.createElement('div');
+    feedbackElement.textContent = message;
+    feedbackElement.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: ${type === 'success' ? 'var(--azul-gradient)' : 'linear-gradient(135deg, #ef4444, #dc2626)'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        font-size: 1rem;
+        max-width: 320px;
+        opacity: 0;
+        transform: translateX(20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    `;
+    
+    document.body.appendChild(feedbackElement);
+
+    // Animate in
+    setTimeout(() => {
+        feedbackElement.style.opacity = '1';
+        feedbackElement.style.transform = 'translateX(0)';
+    }, 10);
+
+    // Animate out and remove after 5 seconds
+    setTimeout(() => {
+        feedbackElement.style.opacity = '0';
+        feedbackElement.style.transform = 'translateX(20px)';
+        setTimeout(() => {
+            if (feedbackElement.parentNode) {
+                feedbackElement.parentNode.removeChild(feedbackElement);
+            }
+        }, 300);
+    }, 5000);
+}
+
+
+// ============================================
+// INTERSECTION OBSERVER FOR ANIMATIONS
+// ============================================
+
+function initializeIntersectionObserver() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     };
     
-    return imageMap[projectTitle] || "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop&crop=center";
-  }
-
-  setupFilters() {
-    this.filterBtns.forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        const filter = e.target.dataset.filter;
-        this.setActiveFilter(filter);
-        this.filterProjects(filter);
-      });
-    });
-  }
-
-  setActiveFilter(filter) {
-    this.filterBtns.forEach(btn => btn.classList.remove("active"));
-    document.querySelector(`[data-filter="${filter}"]`).classList.add("active");
-    this.currentFilter = filter;
-  }
-
-  filterProjects(filter) {
-    const projectCards = document.querySelectorAll(".project-card");
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, observerOptions);
     
-    projectCards.forEach(card => {
-      const category = card.dataset.category;
-      if (filter === "all" || category === filter) {
-        card.style.display = "block";
-        card.classList.add("fade-in");
-        setTimeout(() => card.classList.add("visible"), 100);
-      } else {
-        card.style.display = "none";
-        card.classList.remove("visible");
-      }
-    });
-  }
-
-  renderProjects() {
-    if (!this.projectsContainer) return;
+    // Observe elements that should animate in
+    const animateElements = document.querySelectorAll(
+        '.stat-card, .spec-card, .skill-category, .project-card, .experience-item'
+    );
     
-    this.projectsContainer.innerHTML = projects.map(project => {
-      const techTags = project.tech ? project.tech.map(tech => 
-        `<span class="tech-tag">${tech}</span>`
-      ).join('') : '';
-
-      const links = this.generateProjectLinks(project);
-
-      return `
-        <div class="project-card fade-in" data-category="${project.category}">
-          <div class="project-image" style="background-image: url('${this.getProjectImage(project.title)}')"></div>
-          <div class="project-content">
-            <div class="project-meta">
-              <span class="status-badge status-${project.statusColor}">${project.status}</span>
-              <span class="category-tag">${project.categoryLabel}</span>
-            </div>
-            
-            <h3>${project.title}</h3>
-            <p class="project-summary">${project.summary}</p>
-            
-            ${techTags ? `<div class="project-tech">${techTags}</div>` : ''}
-            
-            <div class="project-links">
-               <button class="btn btn-secondary view-details-btn" data-project-title="${project.title}">View Details</button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  generateProjectLinks(project) {
-    let links = [];
-    
-    if (project.github) {
-      links.push(`<a href="${project.github}" class="project-link" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.98-.399 3.003-.404 1.022.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.654 1.653.246 2.874.12 3.176.77.84 1.233 1.91 1.233 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </svg>
-        Code
-      </a>`);
-    }
-    
-    if (project.demo) {
-      links.push(`<a href="${project.demo}" class="project-link" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="2"/>
-          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2"/>
-        </svg>
-        Demo
-      </a>`);
-    }
-    
-    if (project.url && !project.github) {
-      links.push(`<a href="${project.url}" class="project-link" target="_blank">
-        View Project →
-      </a>`);
-    }
-    
-    return links.join('');
-  }
+    animateElements.forEach(el => observer.observe(el));
 }
 
-// Legacy render function for compatibility
-function renderProjects() {
-  const projectsManager = new ProjectsManager();
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+// Debounce function for performance optimization
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
-// GitHub icon SVG data
-const githubIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.98-.399 3.003-.404 1.022.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.654 1.653.246 2.874.12 3.176.77.84 1.233 1.91 1.233 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>`;
-
-// LinkedIn icon SVG data
-const linkedinIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.231zM5.8 7.401a1.59 1.59 0 0 1-1.548-1.602 1.59 1.59 0 1 1 1.548 1.602zm-1.292 13.051H7.09v-13.5H4.508v13.5zM22 24H2V0h20v24z"/></svg>`;
-
-// Social Links Data
-const socialLinks = [
-    { name: 'GitHub', href: 'https://github.com/ammar-io', icon: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.98-.399 3.003-.404 1.022.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.654 1.653.246 2.874.12 3.176.77.84 1.233 1.91 1.233 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>' },
-    { name: 'LinkedIn', href: 'https://www.linkedin.com/in/aali02/', icon: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.231zM5.8 7.401a1.59 1.59 0 0 1-1.548-1.602 1.59 1.59 0 1 1 1.548 1.602zm-1.292 13.051H7.09v-13.5H4.508v13.5zM22 24H2V0h20v24z"/></svg>' },
-    { name: 'Email', href: 'mailto:ammar.neuroai@gmail.com', icon: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg>' }
-];
-
-// Render social links to the DOM
-function renderSocials() {
-  const socialContainers = document.querySelectorAll(".social-links");
-  socialContainers.forEach((socialsContainer) => {
-    socialLinks.forEach((link) => {
-      const a = document.createElement("a");
-      a.href = link.href;
-      a.classList.add("social-icon-link");
-      a.innerHTML = link.icon;
-      socialsContainer.appendChild(a);
-    });
-  });
+// Throttle function for scroll events
+function throttle(func, limit) {
+    let inThrottle;
+    return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
 }
 
-// Wait for DOM to be fully loaded before running
-document.addEventListener('DOMContentLoaded', () => {
-  // Initialize the 3D brain visualization
-  try {
-    init();
-    animate();
-  } catch (e) {
-    console.error("Error initializing 3D visualization:", e);
-  }
-  
-  // Render projects and social links
-  renderProjects();
-  renderSocials();
+// ============================================
+// PERFORMANCE OPTIMIZATIONS
+// ============================================
+
+// Optimize scroll handlers with throttling
+const optimizedScrollHandler = throttle(() => {
+    updateActiveSection();
+    handleScrollEffects();
+    updateScrollProgress();
+}, 16); // ~60fps
+
+// Replace multiple scroll listeners with single optimized handler
+window.addEventListener('scroll', optimizedScrollHandler, { passive: true });
+
+// ============================================
+// ACCESSIBILITY ENHANCEMENTS
+// ============================================
+
+// Handle keyboard navigation
+document.addEventListener('keydown', function(e) {
+    // Handle Escape key to close mobile menu
+    if (e.key === 'Escape' && isMobileMenuOpen) {
+        toggleMobileMenu();
+    }
+    
+    // Handle Enter key on buttons
+    if (e.key === 'Enter' && e.target.tagName === 'BUTTON') {
+        e.target.click();
+    }
 });
+
+// Removed intrusive auto-scroll on focus for a calmer, predictable UX
+
+// ============================================
+// ERROR HANDLING
+// ============================================
+
+window.addEventListener('error', function(e) {
+    console.error('Portfolio website error:', e.error);
+    // You can add error reporting here
+});
+
+// === Animated Logo Orb ===
+// --- Simple 3D noise function for fluid-like motion ---
+function fract(x) { return x - Math.floor(x); }
+function pseudoNoise3D(x, y, z) {
+    // Hash-based pseudo-noise in [0,1)
+    return fract(Math.sin(x * 12.9898 + y * 78.233 + z * 37.719) * 43758.5453);
+}
+
+function animateLogoOrb() {
+    const canvas = document.getElementById('logo-orb');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+    const R = 15; // sphere radius
+    const N = 700; // lighter for performance and subtlety
+    const nodes = [];
+    for (let i = 0; i < N; i++) {
+        // Spherical coordinates
+        const phi = Math.acos(1 - 2 * (i + 0.5) / N); // latitude
+        const theta = Math.PI * (1 + Math.sqrt(5)) * i; // longitude (golden angle)
+        // Each node gets a random phase for subtle variation
+        const phase = Math.random() * Math.PI * 2;
+        nodes.push({phi, theta, phase});
+    }
+    let t = 0;
+    function draw() {
+        ctx.clearRect(0, 0, w, h);
+        // Sphere rotation
+        const rotY = t * 0.25;
+        const rotX = Math.sin(t * 0.15) * 0.2;
+        // Global splash wave
+        const splashWave = Math.sin(t * 0.18) * 0.9 + Math.cos(t * 0.09) * 0.7;
+        for (let i = 0; i < N; i++) {
+            let node = nodes[i];
+            // Convert spherical to cartesian for noise sampling
+            let x0 = Math.sin(node.phi) * Math.cos(node.theta);
+            let y0 = Math.sin(node.phi) * Math.sin(node.theta);
+            let z0 = Math.cos(node.phi);
+            // Sample 3D pseudo-noise field for fluid-like velocity
+            let n1 = pseudoNoise3D(x0 + t * 0.12, y0, z0);
+            let n2 = pseudoNoise3D(x0, y0 + t * 0.12, z0);
+            let n3 = pseudoNoise3D(x0, y0, z0 + t * 0.12);
+            // Curl-like effect: use noise to perturb theta/phi
+            let dTheta = (n1 - 0.5) * 0.25; // subtle swirl
+            let dPhi = (n2 - 0.5) * 0.2 + Math.sin(t * 0.4 + node.phase) * 0.04;
+            // Minimal radial variance
+            let dR = (n3 - 0.5) * 0.6;
+            // Apply perturbation
+            let phiWavy = node.phi + dPhi;
+            let thetaWavy = node.theta + dTheta;
+            let rWavy = R + dR;
+            // Spherical to Cartesian
+            let x = Math.sin(phiWavy) * Math.cos(thetaWavy);
+            let y = Math.sin(phiWavy) * Math.sin(thetaWavy);
+            let z = Math.cos(phiWavy);
+            // Rotate around Y axis
+            let x1 = x * Math.cos(rotY) - z * Math.sin(rotY);
+            let z1 = x * Math.sin(rotY) + z * Math.cos(rotY);
+            // Rotate around X axis
+            let y1 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
+            let z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+            // Perspective
+            const persp = 0.7 + 0.6 * (z2 + 1) / 2;
+            const px = cx + x1 * rWavy * persp;
+            const py = cy + y1 * rWavy * persp;
+            // Node color: blue gradient
+            ctx.beginPath();
+            ctx.arc(px, py, 0.9 * persp, 0, 2 * Math.PI);
+            const depthAlpha = 0.25 + 0.55 * (z2 + 1) / 2; // 0.25–0.8
+            ctx.fillStyle = `rgba(37, 99, 235, ${depthAlpha})`; // royal blue with depth
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        t += 0.004; // gentle motion
+        requestAnimationFrame(draw);
+    }
+    draw();
+}
+
+window.addEventListener('DOMContentLoaded', animateLogoOrb);

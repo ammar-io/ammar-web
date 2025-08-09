@@ -1,148 +1,748 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-    if (window.location.hostname === 'ammar-io.github.io') {
-      window.location.href = 'https://ammaralt.com';
-    }
-  </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ammar Ali | Bridging Neural Signals & AI for Next-Gen Medical Tech</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
-  <meta name="description" content="Personal website of Ammar Ali - Bridging Neural Signals & AI for Next-Gen Medical Tech. Brain & Cognitive Science student at UIUC building neurofeedback, diagnostic, and deep-learning pipelines.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ammar Ali — AI Engineer</title>
+    <meta name="description" content="AI engineer focused on simple, reliable systems for healthcare and human performance.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+                                     
 </head>
 <body>
-  <!-- Global Navigation -->
-  <nav class="global-nav" id="global-nav">
-    <div class="nav-container">
-      <div class="nav-brand">
-        <a href="index.html" class="brand-link">
-          <div class="neuron-monogram">
-            <svg width="32" height="32" viewBox="0 0 32 32">
-              <circle cx="16" cy="16" r="4" fill="currentColor"/>
-              <path d="M16 2v12M16 18v12M2 16h12M18 16h12" stroke="currentColor" stroke-width="2"/>
-              <circle cx="8" cy="8" r="2" fill="currentColor"/>
-              <circle cx="24" cy="8" r="2" fill="currentColor"/>
-              <circle cx="8" cy="24" r="2" fill="currentColor"/>
-              <circle cx="24" cy="24" r="2" fill="currentColor"/>
-            </svg>
-          </div>
-          <span class="brand-text">Ammar Ali</span>
-        </a>
-      </div>
-      
-      <div class="nav-links">
-        <a href="about.html">About</a>
-        <a href="skills.html">Tools/Tech</a>
-        <a href="projects.html">Projects</a>
-        <a href="blog.html">Blog</a>
-        <a href="resume.html">Resume</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      
-      <div class="nav-actions">
-        <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode">
-          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
-          </svg>
-          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </button>
-        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
+    <div class="scroll-progress">
+        <div class="scroll-progress-bar"></div>
     </div>
-  </nav>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="neural-background">
-      <canvas id="neural-canvas"></canvas>
-    </div>
-    
-    <div class="hero-content">
-      <div class="hero-profile">
-        <img src="assets/banquet_solo.jpg" alt="Ammar Ali" class="hero-profile-image">
-      </div>
-      
-      <h1 class="hero-title">Ammar Ali</h1>
-      
-      <p class="hero-subtitle">
-        Building diagnostic and deep-learning pipelines for next-gen medical solutions
-      </p>
-      
-      <div class="hero-cta">
-        <a href="projects.html" class="btn btn-primary">View Projects</a>
-        <a href="resume.html" class="btn btn-secondary">View Resume</a>
-      </div>
-    </div>
-    
-    <div class="scroll-indicator">
-      <div class="scroll-arrow"></div>
-    </div>
-  </section>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="nav-content">
+                <div class="logo-container">
+                    <button class="logo-button" data-section="home">
+                        <canvas id="logo-orb" class="logo-orb" width="48" height="48" aria-label="Animated logo orb"></canvas>
+                        <span class="logo-text">Ammar</span>
+                    </button>
+                </div>
 
-  <!-- Quick Stats Bar -->
-  <section class="stats-section">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item" data-count="5">
-          <span class="stat-number">0</span>
-          <span class="stat-label">Years of Experience</span>
-        </div>
-        <div class="stat-item" data-count="7">
-          <span class="stat-number">0</span>
-          <span class="stat-label">Technical Positions</span>
-        </div>
-        <div class="stat-item" data-count="8">
-          <span class="stat-number">0</span>
-          <span class="stat-label">Open-Source Repos</span>
-        </div>
-        <div class="stat-item" data-count="3">
-          <span class="stat-number">0</span>
-          <span class="stat-label">Leadership Roles</span>
-        </div>
-      </div>
-    </div>
-  </section>
+                <div class="nav-desktop">
+                    <button class="nav-item" data-section="home">Home</button>
+                    <button class="nav-item" data-section="about">About</button>
+                    <button class="nav-item" data-section="skills">Skills</button>
+                    <button class="nav-item" data-section="projects">Projects</button>
+                    <button class="nav-item" data-section="experience">Experience</button>
+                    <button class="nav-item" data-section="contact">Contact</button>
+                </div>
 
-  <!-- Featured Projects Carousel -->
-  <section class="featured-projects">
-    <div class="container">
-      <h2 class="section-title">Featured Projects</h2>
-      <div class="project-carousel">
-        <div class="carousel-track" id="carousel-track">
-          <!-- Project cards will be populated by JavaScript -->
-        </div>
-        <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous project">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </button>
-        <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next project">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </button>
-      </div>
-      <div class="carousel-dots" id="carousel-dots"></div>
-    </div>
-  </section>
+                <div class="nav-controls">
+                    <button class="theme-toggle-btn">
+                        <i data-lucide="sun" class="sun-icon"></i>
+                        <i data-lucide="moon" class="moon-icon hidden"></i>
+                    </button>
+                    <button class="mobile-menu-btn">
+                        <i data-lucide="menu" class="menu-icon"></i>
+                        <i data-lucide="x" class="close-icon hidden"></i>
+                    </button>
+                </div>
+            </div>
 
-  <!-- Project Modal -->
-  <div id="project-modal" class="project-modal"></div>
+            <div class="nav-mobile hidden">
+                <button class="nav-item-mobile" data-section="home">Home</button>
+                <button class="nav-item-mobile" data-section="about">About</button>
+                <button class="nav-item-mobile" data-section="skills">Skills</button>
+                <button class="nav-item-mobile" data-section="projects">Projects</button>
+                <button class="nav-item-mobile" data-section="experience">Experience</button>
+                <button class="nav-item-mobile" data-section="contact">Contact</button>
+            </div>
+        </nav>
+    </header>
 
-  <script src="script.js"></script>
+    <main>
+        <section id="home" class="hero">
+            
+
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-intro">
+                        <img src="assets/banquet_solo.jpg" alt="Ammar Ali photo" class="hero-photo" />
+                        <h1 class="hero-title">
+                            <span class="hero-name">Ammar Ali</span>
+                        </h1>
+                        <h2 class="hero-subtitle">AI Engineer</h2>
+
+                    <p class="hero-description">
+                        I build simple, reliable AI systems for health and human performance.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="assets/Ammar_Ali_2025.pdf" class="btn btn-primary" download>
+                            <i data-lucide="download"></i> Resume
+                        </a>
+                        <button class="btn btn-outline" data-section="projects">
+                            Projects
+                        </button>
+                    </div>
+
+                    <div class="hero-social">
+                        <a href="https://github.com/ammar-io" target="_blank" rel="noopener noreferrer" title="GitHub">
+                            <i data-lucide="github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/aali02/" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                            <i data-lucide="linkedin"></i>
+                        </a>
+                        <a href="mailto:ammar.neuroai@gmail.com" title="Email">
+                            <i data-lucide="mail"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <button class="scroll-indicator" data-section="about" title="Learn more about me">
+                <i data-lucide="chevron-down"></i>
+            </button>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="section-header">
+                    <h2>About</h2>
+                    <p>AI/ML Engineer & MedTech Innovator</p>
+                </div>
+
+                <div class="about-content">
+                    <!-- Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i data-lucide="award" class="stat-icon"></i>
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">Years Experience</div>
+                        </div>
+                        <div class="stat-card">
+                            <i data-lucide="target" class="stat-icon"></i>
+                            <div class="stat-number">7</div>
+                            <div class="stat-label">Techical Positions</div>
+                        </div>
+                        <div class="stat-card">
+                            <i data-lucide="users" class="stat-icon bronze"></i>
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Open Source Repos</div>
+                        </div>
+                        <div class="stat-card">
+                            <i data-lucide="brain" class="stat-icon bronze"></i>
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Leadership Roles</div>
+                        </div>
+                    </div>
+
+                    <div class="specializations">
+                        <div class="spec-card neurotech">
+                            <div class="spec-icon-bg">
+                                <i data-lucide="brain"></i>
+                            </div>
+                            <div class="spec-content">
+                                <h3>Neurotechnology</h3>
+                                <p>BCI • Neural signals • Assistive tech</p>
+                            </div>
+                        </div>
+                        <div class="spec-card medical">
+                            <div class="spec-icon-bg">
+                                <i data-lucide="heart-pulse"></i>
+                            </div>
+                            <div class="spec-content">
+                                <h3>Medical AI</h3>
+                                <p>Imaging • Diagnostics • Clinical AI</p>
+                            </div>
+                        </div>
+                        <div class="spec-card data">
+                            <div class="spec-icon-bg">
+                                <i data-lucide="database-zap"></i>
+                            </div>
+                            <div class="spec-content">
+                                <h3>Systems</h3>
+                                <p>Pipelines • Real-time • Cloud</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="skills">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Skills</h2>
+                </div>
+
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <div class="skill-header">
+                            <div class="skill-icon-bg aiml">
+                                <i data-lucide="brain"></i>
+                            </div>
+                            <h3>AI, Data & ML</h3>
+                        </div>
+                        <div class="skill-items">
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" alt="PyTorch"><span>PyTorch</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow"><span>TensorFlow</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg" alt="Scikit-Learn"><span>Scikit-Learn</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg" alt="OpenCV"><span>OpenCV</span></div>
+                            <div class="skill-item"><img class="skill-logo invert-in-dark" src="assets/icons/langchain.svg" alt="LangChain"><span>LangChain</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="assets/icons/pinecone.png" alt="Pinecone"><span>Pinecone</span></div>
+                            <div class="skill-item"><img class="skill-logo invert-in-dark" src="assets/icons/ray.png" alt="Ray"><span>Ray</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="assets/icons/Databricks.svg" alt="Databricks"><span>Databricks</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachespark/apachespark-original.svg" alt="Spark"><span>Spark</span></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="skill-header">
+                            <div class="skill-icon-bg programming">
+                                <i data-lucide="code-2"></i>
+                            </div>
+                            <h3>Languages & Backend</h3>
+                        </div>
+                        <div class="skill-items">
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++"><span>C++</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#"><span>C#</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"><span>Python</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript"><span>JavaScript</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5"><span>HTML5</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3"><span>CSS3</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI"><span>FastAPI</span></div>
+                            <div class="skill-item"><img class="skill-logo invert-in-dark" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" alt="Flask"><span>Flask</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js"><span>Node.js</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL"><span>PostgreSQL</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB"><span>MongoDB</span></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="skill-header">
+                            <div class="skill-icon-bg cloud">
+                                <i data-lucide="cloud"></i>
+                            </div>
+                            <h3>Cloud & DevOps</h3>
+                        </div>
+                        <div class="skill-items">
+                            <div class="skill-item"><img class="skill-logo invert-in-dark" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS"><span>AWS</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure"><span>Azure</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" alt="GCP"><span>GCP</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker"><span>Docker</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" alt="Kubernetes"><span>Kubernetes</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg" alt="Terraform"><span>Terraform</span></div>
+                            <div class="skill-item"><img class="skill-logo invert-in-dark" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/githubactions/githubactions-original.svg" alt="GitHub Actions"><span>GH Actions</span></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="skill-header">
+                            <div class="skill-icon-bg neurotech">
+                                <i data-lucide="zap"></i>
+                            </div>
+                            <h3>Neurotech, Robotics & Tools</h3>
+                        </div>
+                        <div class="skill-items">
+                            <div class="skill-item"><img class="skill-logo invert-in-dark" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ros/ros-original.svg" alt="ROS"><span>ROS</span></div>
+                            <div class="skill-item"><img class="skill-logo invert-in-dark" src="assets/icons/unity.png" alt="Unity"><span>Unity</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="assets/icons/mne.png" alt="MNE-Python"><span>MNE</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="assets/icons/openbci.webp" alt="OpenBCI"><span>OpenBCI</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/arduino/arduino-original-wordmark.svg" alt="Arduino"><span>Arduino</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/raspberrypi/raspberrypi-original.svg" alt="Raspberry Pi"><span>Raspberry Pi</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git"><span>Git</span></div>
+                            <div class="skill-item"><img class="skill-logo invert-in-dark" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub"><span>GitHub</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="VS Code"><span>VS Code</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pycharm/pycharm-original.svg" alt="PyCharm"><span>PyCharm</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original-wordmark.svg" alt="Jupyter"><span>Jupyter</span></div>
+                            <div class="skill-item"><img class="skill-logo" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux"><span>Linux</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="certifications">
+                    <h3>Certifications</h3>
+                    <div class="cert-badges">
+                        <span class="cert-badge">
+                            <img class="badge-logo invert-in-dark" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" alt="Google Cloud" />
+                            Google Cloud ML Engineer
+                        </span>
+                        <span class="cert-badge">
+                            <img class="badge-logo invert-in-dark" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS" />
+                            AWS AI Engineer
+                        </span>
+                        <span class="cert-badge">
+                            <img class="badge-logo" src="assets/icons/university-of-illinois-1.svg" alt="UIUC" />
+                            Certificate in Data Science
+                        </span>
+                        <span class="cert-badge">
+                            <img class="badge-logo invert-in-dark" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/coursera.svg" alt="Coursera" />
+                            Coursera Machine Learning
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="projects">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Projects</h2>
+                    <!-- <p>Selected projects</p> -->
+                </div>
+
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="assets/img/brainwave.jpg" alt="MindWave">
+                            <div class="project-type medical-ai">Medical AI</div>
+                        </div>
+                        <div class="project-content">
+                            <h3>MindWave</h3>
+                            <p>A VR neurofeedback system using real-time EEG data to help users improve attentional control.</p>
+                            <div class="project-tech">
+                                <span class="tech-badge">Python</span>
+                                <span class="tech-badge">Unity</span>
+                                <span class="tech-badge">VR</span>
+                                <span class="tech-badge">UDP</span>
+                                <span class="tech-badge">EEG</span>
+                                <span class="tech-badge">MNE-Python</span>
+                                <span class="tech-badge">PyTorch</span>
+                                <span class="tech-badge">ROS</span>
+                            </div>
+                            <div class="project-buttons">
+                                <a href="https://github.com/ammar-io/brats-segmentation" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                                    <i data-lucide="github"></i>Code
+                                </a>
+                                <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm disabled-link" aria-disabled="true">
+                                    <i data-lucide="external-link"></i>Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="assets/img/emotions.jpg" alt="Neural Signal Decoder">
+                            <div class="project-type neurotech">Neurotech</div>
+                        </div>
+                        <div class="project-content">
+                            <h3>Neural Signal Decoder</h3>
+                            <p>A deep learning pipeline that classifies motor imagery from EEG signals with 94% accuracy for BCI applications.</p>
+                            <div class="project-tech">
+                                <span class="tech-badge">EEG</span>
+                                <span class="tech-badge">TensorFlow</span>
+                                <span class="tech-badge">U-Net</span>
+                                <span class="tech-badge">ROS 2</span>
+                            </div>
+                            <div class="project-buttons">
+                                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                                    <i data-lucide="github"></i>Code
+                                </a>
+                                <a href="https://demo.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                                    <i data-lucide="external-link"></i>Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="assets/img/colorslayer.jpg" alt="Reduce-Reuse-Recycle">
+                            <div class="project-type drug-discovery">Drug Discovery</div>
+                        </div>
+                        <div class="project-content">
+                            <h3>Reduce-Reuse-Recycle</h3>
+                            <p>A smart waste bin that uses a YOLO-V8 model to automatically identify and sort recyclable materials.</p>
+                            <div class="project-tech">
+                                <span class="tech-badge">YOLO-V8</span>
+                                <span class="tech-badge">Python</span>
+                                <span class="tech-badge">Computer Vision</span>
+                                <span class="tech-badge">Raspberry Pi</span>
+                                <span class="tech-badge">IoT</span>
+                                <span class="tech-badge">LangChain</span>
+                            </div>
+                            <div class="project-buttons">
+                                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                                    <i data-lucide="github"></i>Code
+                                </a>
+                                <a href="https://demo.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                                    <i data-lucide="external-link"></i>Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="assets/img/linear.jpg" alt="Kalman Filter Cursor Tracker">
+                            <div class="project-type neurotech">Neurotech</div>
+                        </div>
+                        <div class="project-content">
+                            <h3>Kalman Filter Cursor Tracker</h3>
+                            <p>A predictive cursor tracking system using a Kalman Filter to enhance human-computer interaction for accessibility.</p>
+                            <div class="project-tech">
+                                <span class="tech-badge">Python</span>
+                                <span class="tech-badge">OpenCV</span>
+                                <span class="tech-badge">Kalman Filter</span>
+                                <span class="tech-badge">OBS</span>
+                            </div>
+                            <div class="project-buttons">
+                                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                                    <i data-lucide="github"></i>Code
+                                </a>
+                                <a href="https://demo.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                                    <i data-lucide="external-link"></i>Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="assets/img/fiber.jpg" alt="Medical Image Segmentation">
+                            <div class="project-type medical-ai">Medical AI</div>
+                        </div>
+                        <div class="project-content">
+                            <h3>Medical Image Segmentation</h3>
+                            <p>Retinal-layer segmentation on the Duke SD-OCT dataset: preprocessing → UNet/ViT-hybrid → post-hoc uncertainty maps.</p>
+                            <div class="project-tech">
+                                <span class="tech-badge">PyTorch</span>
+                                <span class="tech-badge">U-Net</span>
+                                <span class="tech-badge">MRI</span>
+                                <span class="tech-badge">ViT-hybrid</span>
+                                <span class="tech-badge">TorchScript</span>
+                                <span class="tech-badge">AWS SAM</span>
+                                <span class="tech-badge">DeepLab</span>
+
+                            </div>
+                            <div class="project-buttons">
+                                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                                    <i data-lucide="github"></i>Code
+                                </a>
+                                <a href="https://demo.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                                    <i data-lucide="external-link"></i>Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="assets/img/net.jpg" alt="FHIR ETL service">
+                            <div class="project-type medical-ai">Medical AI</div>
+                        </div>
+                        <div class="project-content">
+                            <h3>FHIR ETL service</h3>
+                            <p>Gets EHR bundles, de-identify PHI, load to a Postgres-backed FHIR server with automated Unit tests for HIPAA “safe-harbor” compliance.</p>
+                            <div class="project-tech">
+                                <span class="tech-badge">Python</span>
+                                <span class="tech-badge">PostgreSQL</span>
+                                <span class="tech-badge">FHIR</span>
+                                <span class="tech-badge">Unit Tests</span>
+                                <span class="tech-badge">HIPAA</span>
+                                <span class="tech-badge">Synthea</span>
+                                <span class="tech-badge">FastAPI</span>
+                                <span class="tech-badge">Docker</span>
+                                <span class="tech-badge">AWS</span>
+                            </div>
+                            <div class="project-buttons">
+                                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                                    <i data-lucide="github"></i>Code
+                                </a>
+                                <a href="https://demo.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                                    <i data-lucide="external-link"></i>Demo
+                                </a>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="experience">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Experience</h2>
+                    <!-- <p>Journey through cutting-edge technology and research</p> -->
+                </div>
+
+                <div class="experience-content">
+                    <div class="experience-main">
+                        <h3 class="subsection-title">
+                            <i data-lucide="building"></i>
+                            Professional Experience
+                        </h3>
+                        
+                        <div class="experience-timeline">
+                            <div class="experience-item">
+                                <div class="exp-header">
+                                    <div class="exp-title-group">
+                                        <div>
+                                            <h4>Data + AI Engineer Intern</h4>
+                                            <div class="exp-company">
+                                                <span class="company-name">RoyalCyber</span>
+                                                <span class="exp-location">
+                                                    <i data-lucide="map-pin"></i>
+                                                    Naperville, IL
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="exp-period">2025 - Present</div>
+                                </div>
+                                <div class="exp-content">
+                                    <p>Developed an agentic AI voice assistant for real‑time calling, scheduling, and CRM integration.</p>
+                                    <div class="exp-highlights">
+                                        <div class="highlight">Multi‑modal Agentic AI + RAG on Bedrock.</div>
+                                        <div class="highlight">Built MCP servers for Healthcare and Law Domains.</div>
+                                        <div class="highlight">Integrated with Clio, Square, and Epic EHR and CRM tools.</div>
+                                    </div>
+                                    <div class="exp-tech">
+                                        <span class="tech-badge">AWS</span>
+                                        <span class="tech-badge">Microsoft Azure</span>
+                                        <span class="tech-badge">Model Context Protocol (MCP)</span>
+                                        <span class="tech-badge">Python</span>
+                                        <span class="tech-badge">JavaScript/TypeScript</span>
+                                        <span class="tech-badge">MongoDB/DynamoDB</span>
+                                        <span class="tech-badge">Node.js</span>
+                                        <span class="tech-badge">FastAPI</span>
+                                        <span class="tech-badge">LangChain/LangGraph</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="experience-item">
+                                <div class="exp-header">
+                                    <div class="exp-title-group">
+                                        <div>
+                                            <h4>Project Manager</h4>
+                                            <div class="exp-company">
+                                                <span class="company-name">NeuroTech, UIUC</span>
+                                                <span class="exp-location">
+                                                    <i data-lucide="map-pin"></i>
+                                                    Champaign, IL
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="exp-period">2023 - 2025</div>
+                                </div>
+                                <div class="exp-content">
+                                    <p>Head of Signal Processing and AI. Developed a VR neurofeedback system using real‑time EEG data to help users improve attentional control.</p>
+                                    <div class="exp-highlights">
+                                            <div class="highlight">Trained SVM, CNN, GNN & LSTM models.</div>
+                                            <div class="highlight">Real‑time ICA/PCA + classifiers.</div>
+                                            <div class="highlight">Large‑scale EEG processing.</div>
+                                        </div>
+                                    <div class="exp-tech">
+                                        <span class="tech-badge">Python</span>
+                                        <span class="tech-badge">Scikit-learn</span>
+                                        <span class="tech-badge">PyTorch</span>
+                                        <span class="tech-badge">MNE-Python</span>
+                                        <span class="tech-badge">OpenBCI</span>
+                                        <span class="tech-badge">Arduino</span>
+                                        <span class="tech-badge">Raspberry Pi</span>
+                                        <span class="tech-badge">ROS</span>
+                                        <span class="tech-badge">Unity</span>
+                                        <span class="tech-badge">C#</span>
+                                        <span class="tech-badge">UDP</span>
+                                        <span class="tech-badge">EEG</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="experience-item">
+                                <div class="exp-header">
+                                    <div class="exp-title-group">
+                                        <div>
+                                            <h4>Software Engineer</h4>
+                                            <div class="exp-company">
+                                                <span class="company-name">Disruption Lab at Gies</span>
+                                                <span class="exp-location">
+                                                    <i data-lucide="map-pin"></i>
+                                                    Champaign, IL
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="exp-period">2022 - 2024</div>
+                                </div>
+                                <div class="exp-content">
+                                    <p>Built software for research and data products using AI and immersive tech.</p>
+                                    <div class="exp-highlights">
+                                        <div class="highlight">Built a OpenAI chatbot for DSRS. </div>
+                                        <div class="highlight">Blockchain auditing with ZKPs; faster digital asset validation.</div>
+                                        <div class="highlight">VR data visualization in Unity for high‑dimensional datasets.</div>
+                                    </div>
+                                    <div class="exp-tech">
+                                        <span class="tech-badge">Python</span>
+                                        <span class="tech-badge">Javascript</span>
+                                        <span class="tech-badge">OpenAI</span>
+                                        <span class="tech-badge">LangGraph</span>
+                                        <span class="tech-badge">LangChain</span>
+                                        <span class="tech-badge">FAISS</span>
+                                        <span class="tech-badge">Unity</span>
+                                        <span class="tech-badge">Circom</span>
+                                        <span class="tech-badge">Snark.js</span>
+                                        <span class="tech-badge">Streamlit</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="experience-sidebar">
+                        <div class="sidebar-section">
+                            <h3 class="subsection-title">
+                                <i data-lucide="graduation-cap"></i>
+                                Education
+                            </h3>
+                            <div class="edu-items">
+                                <div class="edu-item">
+                                    <img class="edu-logo" src="assets/icons/university-of-illinois-1.svg" alt="University of Illinois Urbana-Champaign" />
+                                    <div class="edu-content">
+                                        <h4>B.S. Brain & Cognitive Science, Computer Science</h4>
+                                        <p class="school">University of Illinois Urbana-Champaign</p>
+                                        <div class="edu-details">
+                                            <span class="focus">Neural Engineering </span>
+                                            <span class="period">2022 - 2025</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="edu-item">
+                                    <img class="edu-logo" src="assets/icons/college_of_dupage_logo.jpg" alt="College of DuPage" />
+                                    <div class="edu-content">
+                                        <h4>Computer Information Systems</h4>
+                                        <p class="school">College of Dupage</p>
+                                        <div class="edu-details">
+                                            <span class="focus">Transferred to UIUC </span>
+                                            <span class="period">2020 - 2022</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-section">
+                            <h3 class="subsection-title">
+                                <i data-lucide="award"></i>
+                                Certifications
+                            </h3>
+                            <div class="cert-items">
+                                <div class="cert-item">
+                                    <img class="cert-logo invert-in-dark" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS" />
+                                    <span class="cert-name">AWS AI Engineer</span>
+                                    <span class="cert-year">2025</span>
+                                </div>
+                                <div class="cert-item">
+                                    <img class="cert-logo" src="https://logo.clearbit.com/uw.edu" alt="University of Washington" />
+                                    <span class="cert-name">Computational Neuroscience</span>
+                                    <span class="cert-year">2025</span>
+                                </div>
+                                <div class="cert-item">
+                                    <img class="cert-logo" src="assets/icons/university-of-illinois-1.svg" alt="UIUC" />
+                                    <span class="cert-name">Certificate in Data Science</span>
+                                    <span class="cert-year">2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Contact</h2>
+                    <p>Open to roles and collaborations.</p>
+                </div>
+
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-intro">
+                            <h3>
+                                <i data-lucide="message-square"></i>
+                                Get in touch
+                            </h3>
+                        </div>
+
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="method-icon email">
+                                    <i data-lucide="mail"></i>
+                                </div>
+                                <div class="method-content">
+                                    <h4>Email</h4>
+                                    <p>ammar.neuroai@gmail.com</p>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-icon phone">
+                                    <i data-lucide="linkedin"></i>
+                                </div>
+                                <div class="method-content">
+                                    <h4>LinkedIn</h4>
+                                    <p>linkedin.com/in/aali02</p>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-icon location">
+                                    <i data-lucide="map-pin"></i>
+                                </div>
+                                <div class="method-content">
+                                    <h4>Location</h4>
+                                    <p>Chicago, IL</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="social-section">
+                            <h4>Follow Me</h4>
+                            <div class="social-links">
+                                <a href="https://github.com/ammar-io" target="_blank" rel="noopener noreferrer" title="GitHub">
+                                    <i data-lucide="github"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/aali02/" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                                    <i data-lucide="linkedin"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-form-container">
+                        <form class="contact-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" id="name" name="name" placeholder="Your name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" placeholder="How can I help?" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">
+                                <i data-lucide="send"></i>
+                                Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
