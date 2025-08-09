@@ -157,10 +157,9 @@ p, input, textarea { font-size: 1rem; font-weight: 400; line-height: 1.6; }
 .header.scrolled {
     background: rgba(250, 251, 252, 0.75);
     backdrop-filter: saturate(160%) blur(14px);
-    border-bottom: 1px solid var(--border);
 }
 
-body.dark-mode .header.scrolled {
+.dark .header.scrolled {
     background: rgba(15, 20, 25, 0.8);
 }
 
@@ -453,7 +452,6 @@ body.dark-mode .nav-mobile {
     justify-content: center;
     gap: 1.5rem;
     padding-top: 2rem;
-    margin-bottom: 2.5rem;
 }
 
 .hero-social a {
@@ -468,7 +466,7 @@ body.dark-mode .nav-mobile {
 
 .scroll-indicator {
     position: absolute;
-    bottom: 2rem;
+    bottom: -10rem;
     left: 50%;
     transform: translateX(-50%);
     background: none;
@@ -1000,7 +998,6 @@ body.dark-mode .project-type.healthcare-analytics {
 .project-content p {
     font-size: 0.875rem;
     color: var(--muted-foreground);
-    margin-bottom: 0.5rem;
 }
 
 .project-details p strong {
@@ -1113,6 +1110,20 @@ body.dark-mode .project-type.healthcare-analytics {
     flex: 1;
 }
 
+.exp-logo {
+    display: flex;
+    align-items: center;
+}
+
+.company-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: none;
+    background: var(--card);
+}
+
 .exp-emoji {
     font-size: 1.5rem;
 }
@@ -1139,7 +1150,12 @@ body.dark-mode .project-type.healthcare-analytics {
     align-items: center;
     gap: 0.25rem;
     color: var(--muted-foreground);
-    font-size: 0.875rem;
+    font-size: 0.75rem;
+}
+
+.exp-location i {
+    width: 6px;
+    height: 6px;
 }
 
 .exp-period {
@@ -1164,8 +1180,8 @@ body.dark-mode .project-type.healthcare-analytics {
 
 .exp-highlights {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.25rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
 }
 
 .highlight {
@@ -1196,8 +1212,8 @@ body.dark-mode .project-type.healthcare-analytics {
 }
 
 .sidebar-section {
-    background: var(--card);
-    border: 1px solid var(--border);
+    background: transparent;
+    border: none;
     border-radius: var(--radius);
     padding: 1.5rem;
 }
@@ -1553,6 +1569,10 @@ body.dark-mode .project-type.healthcare-analytics {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
+    }
+    
+    .exp-highlights {
+        grid-template-columns: 1fr;
     }
     
     .contact-content {

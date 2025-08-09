@@ -134,21 +134,22 @@ function updateScrollProgress() {
 function initializeActiveSection() { /* replaced by optimized handler */ }
 
 function updateActiveSection() {
-    const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
-    const scrollPosition = window.scrollY + 100;
-    
-    for (const sectionId of sections) {
+    const sectionIds = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
+    const viewportAnchor = 120; // approximate header/offset like reference
+
+    let newActiveSection = sectionIds[0];
+    for (const sectionId of sectionIds) {
         const element = document.getElementById(sectionId);
-        if (element) {
-            const { offsetTop, offsetHeight } = element;
-            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-                if (activeSection !== sectionId) {
-                    activeSection = sectionId;
-                    updateActiveNavigation();
-                }
-                break;
-            }
+        if (!element) continue;
+        const rect = element.getBoundingClientRect();
+        if (rect.top - viewportAnchor <= 0) {
+            newActiveSection = sectionId;
         }
+    }
+
+    if (newActiveSection !== activeSection) {
+        activeSection = newActiveSection;
+        updateActiveNavigation();
     }
 }
 
