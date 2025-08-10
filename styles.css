@@ -1154,9 +1154,9 @@ body.dark-mode .project-type.healthcare-analytics {
     font-size: 0.75rem;
 }
 
-.exp-location i {
-    width: 6px;
-    height: 6px;
+.exp-location .lucide {
+    width: 1em;
+    height: 1em;
 }
 
 .exp-period {
@@ -1330,6 +1330,12 @@ body.dark-mode .project-type.healthcare-analytics {
 .contact {
     padding: 5rem 0;
     background: var(--stone-gradient);
+    /* Ensure the contact section fills the viewport height */
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
 }
 
 .contact-content {
