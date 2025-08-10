@@ -155,12 +155,13 @@ p, input, textarea { font-size: 1rem; font-weight: 400; line-height: 1.6; }
 }
 
 .header.scrolled {
-    background: rgba(250, 251, 252, 0.75);
-    backdrop-filter: saturate(160%) blur(14px);
+    background: rgba(250, 251, 252, 0.6);
+    backdrop-filter: blur(8px);
 }
 
-.dark .header.scrolled {
-    background: rgba(15, 20, 25, 0.8);
+body.dark-mode .header.scrolled {
+    background: rgba(15, 20, 25, 0.6);
+    backdrop-filter: blur(8px);
 }
 
 .nav-container {
@@ -729,7 +730,7 @@ body.dark-mode .spec-content h3 { color: var(--azul-sky); }
 
 @media (min-width: 1024px) {
     .skills-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 2fr);
     }
 }
 
