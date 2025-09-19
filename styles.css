@@ -2,39 +2,46 @@
    AZUL MACAUBAS QUARTZITE DESIGN SYSTEM
    ============================================ */
 
-   :root {
-    /* Core Colors - Light Theme */
-    --background: #fafbfc;
-    --foreground: #1a2332;
-    --card: #ffffff;
-    --card-foreground: #1a2332;
-    --muted: #f1f5f9;
-    --muted-foreground: #64748b;
-    --border: #e2e8f0;
-    
-    /* Azul Macaubas Palette */
-    --azul-deep: #0f1419;
-    --azul-navy: #1e3a5f;
-    --azul-royal: #2563eb;
-    --azul-sky: #0ea5e9;
-    --azul-light: #dbeafe;
-    --stone-white: #fafbfc;
-    --stone-gray: #f1f5f9;
-    --stone-dark: #64748b;
-    --bronze-accent: #d97706;
-    --bronze-light: #fed7aa;
-    
-    /* Gradients */
-    --azul-gradient: linear-gradient(135deg, var(--azul-navy) 0%, var(--azul-royal) 50%, var(--azul-sky) 100%);
-    --stone-gradient: linear-gradient(135deg, var(--stone-white) 0%, var(--stone-gray) 100%);
-    
-    /* Typography */
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --radius: 0.625rem;
-    --maxw: 1280px;
-    --shadow-s: 0 4px 12px rgba(0,0,0,0.06);
-    --shadow-m: 0 10px 24px rgba(0,0,0,0.08);
-    --shadow-l: 0 20px 40px rgba(0,0,0,0.10);
+:root {
+   /* Core Colors - Light Theme (Japanese-inspired: eggshell + crimson accents) */
+   --eggshell: #F5F3E7;
+   --background: var(--eggshell);
+   --foreground: #1a2332;
+   --card: #FFFCF7;
+   --card-foreground: #1a2332;
+   --muted: #EFE9DD;
+   --muted-foreground: #64748b;
+   --border: #E6E0D4;
+   
+   /* Accent Palette (reds) */
+   --red-primary: #CB1B45; /* Akabeni */
+   --red-dark: #9F353A;    /* Benitobi */
+   --red-light: #F2D7DA;
+   
+   /* Legacy token remaps for accent usage */
+   --azul-deep: #0f1419;
+   --azul-navy: #7A1E2C;
+   --azul-royal: var(--red-primary);
+   --azul-sky: #E7A1A8;
+   --azul-light: #F6DDE0;
+   
+   --stone-white: var(--eggshell);
+   --stone-gray: #EDE6D8;
+   --stone-dark: #7a7970;
+   --bronze-accent: #d97706;
+   --bronze-light: #fed7aa;
+   
+   /* Solids (no gradients) */
+   --azul-gradient: var(--azul-royal);
+   --stone-gradient: var(--stone-white);
+   
+   /* Typography */
+   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+   --radius: 0.625rem;
+   --maxw: 1280px;
+   --shadow-s: 0 4px 12px rgba(0,0,0,0.06);
+   --shadow-m: 0 10px 24px rgba(0,0,0,0.08);
+   --shadow-l: 0 20px 40px rgba(0,0,0,0.10);
 }
 
 body.dark-mode {
@@ -45,14 +52,14 @@ body.dark-mode {
     --muted: #1e293b;
     --muted-foreground: #94a3b8;
     --border: #334155;
-    --azul-royal: #3b82f6;
-    --azul-sky: #06b6d4;
-    --stone-white: #f8fafc;
-    --stone-gray: #334155;
+    --azul-royal: #F199A0; /* lighter accent for contrast */
+    --azul-sky: #F2B8BE;
+    --stone-white: #0f1419;
+    --stone-gray: #1a2332;
     --stone-dark: #94a3b8;
     --bronze-accent: #f59e0b;
     --bronze-light: #451a03;
-    --stone-gradient: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
+    --stone-gradient: #0f1419;
 }
 
 .nav-controls {
@@ -345,10 +352,8 @@ body.dark-mode .nav-mobile {
     justify-content: center;
     position: relative;
     overflow: hidden;
-    background-image:
-        radial-gradient(circle at 20% 80%, rgba(30, 58, 95, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+    background-image: none;
+    background-color: var(--background);
 }
 
 .hero-bg { display: none; }
@@ -1441,7 +1446,7 @@ body.dark-mode .project-type.healthcare-analytics {
 
 .social-links a:hover {
     box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1);
-    border-color: rgba(37, 99, 235, 0.3);
+    border-color: rgba(203, 27, 69, 0.3);
 }
 
 /* ============================================

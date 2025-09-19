@@ -288,7 +288,7 @@ function showFormFeedback(message, type) {
         position: fixed;
         top: 80px;
         right: 20px;
-        background: ${type === 'success' ? 'var(--azul-gradient)' : 'linear-gradient(135deg, #ef4444, #dc2626)'};
+        background: ${type === 'success' ? 'var(--azul-royal)' : '#b91c1c'};
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 0.5rem;
@@ -489,11 +489,11 @@ function animateLogoOrb() {
             const persp = 0.7 + 0.6 * (z2 + 1) / 2;
             const px = cx + x1 * rWavy * persp;
             const py = cy + y1 * rWavy * persp;
-            // Node color: blue gradient
+            // Node color: red solid
             ctx.beginPath();
             ctx.arc(px, py, 0.9 * persp, 0, 2 * Math.PI);
             const depthAlpha = 0.25 + 0.55 * (z2 + 1) / 2; // 0.25–0.8
-            ctx.fillStyle = `rgba(37, 99, 235, ${depthAlpha})`; // royal blue with depth
+            ctx.fillStyle = `rgba(203, 27, 69, ${depthAlpha})`; // crimson with depth
             ctx.fill();
         }
         ctx.globalAlpha = 1;
