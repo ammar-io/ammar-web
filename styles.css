@@ -105,6 +105,17 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Site-wide river background canvas */
+.site-river-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
 /* Typography */
 h1 { font-size: 2rem; font-weight: 500; line-height: 1.5; }
 h2 { font-size: 1.5rem; font-weight: 500; line-height: 1.5; }
@@ -353,7 +364,17 @@ body.dark-mode .nav-mobile {
     position: relative;
     overflow: hidden;
     background-image: none;
-    background-color: var(--background);
+    background-color: transparent;
+}
+
+/* River of nodes background canvas */
+.bg-river-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .hero-bg { display: none; }
@@ -589,7 +610,7 @@ body.dark-mode .nav-mobile {
 
 .about {
     padding: 5rem 0;
-    background: var(--stone-gradient);
+    background: transparent;
 }
 
 .about-content {
@@ -874,7 +895,7 @@ body.dark-mode .skill-item {
 
 .projects {
     padding: 5rem 0;
-    background: var(--stone-gradient);
+    background: transparent;
 }
 
 .projects-grid {
@@ -1334,7 +1355,7 @@ body.dark-mode .project-type.healthcare-analytics {
 
 .contact {
     padding: 5rem 0;
-    background: var(--stone-gradient);
+    background: transparent;
     /* Ensure the contact section fills the viewport height */
     min-height: 100vh;
     min-height: 100svh;

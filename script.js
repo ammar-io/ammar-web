@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeIntersectionObserver();
     initializeNavigation();
     // Minimalist: no parallax/mouse tracking
+    initializeRiverBackground();
 });
 
 // Initialize Lucide icons
@@ -134,7 +135,7 @@ function updateScrollProgress() {
 function initializeActiveSection() { /* replaced by optimized handler */ }
 
 function updateActiveSection() {
-    const sectionIds = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
+    const sectionIds = ['home', 'about', 'projects', 'experience', 'contact'];
     const viewportAnchor = 120; // approximate header/offset like reference
 
     let newActiveSection = sectionIds[0];
@@ -504,3 +505,196 @@ function animateLogoOrb() {
 }
 
 window.addEventListener('DOMContentLoaded', animateLogoOrb);
+
+// ============================================
+// RIVER OF NODES BACKGROUND
+// ============================================
+
+function getComputedCSSVar(name) {
+    return getComputedStyle(document.body).getPropertyValue(name).trim();
+}
+
+function initializeRiverBackground() {
+    const canvas = document.getElementById('river-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+    let dpr = Math.max(1, window.devicePixelRatio || 1);
+    
+    // Strings data: multiple bundles of flowing strings, each a polyline of points
+    let bundles = [];
+    let strings = [];
+    let time = 0;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let shouldLoop = !prefersReduced;
+
+    function resize() {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        canvas.width = Math.floor(vw * dpr);
+        canvas.height = Math.floor(vh * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        buildScene();
+    }
+
+    function random(seed) {
+        const x = Math.sin(seed) * 10000;
+        return x - Math.floor(x);
+    }
+
+    function buildScene() {
+        const width = canvas.width / dpr;
+        const height = canvas.height / dpr;
+        bundles = [];
+        strings = [];
+
+        const numBundles = Math.max(6, Math.floor(width / 220) + 3);
+        const segmentsPerString = Math.max(20, Math.floor(height / 36));
+
+        for (let b = 0; b < numBundles; b++) {
+            const centerX = (b + 0.5) * (width / numBundles) + (random(b * 17.17) - 0.5) * 30;
+            const bundlePhase = random(b * 31.7) * Math.PI * 2;
+            const stringsInBundle = 3 + Math.floor(random(b * 93.1) * 3); // 3–5 strings
+            const bundle = { centerX, phase: bundlePhase };
+            bundles.push(bundle);
+
+            for (let s = 0; s < stringsInBundle; s++) {
+                const amp = 14 + random(s * 51.9 + b) * 16; // 14–30 px amplitude
+                const freq = 0.008 + random(s * 7.7 + b) * 0.006; // 0.008–0.014
+                const phase = random(s * 113.3 + b) * Math.PI * 2;
+                const colorType = (s === 0 && b % 2 === 0) ? 'accent' : 'muted';
+                const lateralOffset = (random(s * 3.1 + b) - 0.5) * 36; // small spread inside bundle
+
+                const points = [];
+                const midY = height * 0.5;
+                const sigmaY = height * 0.35;
+                for (let k = 0; k < segmentsPerString; k++) {
+                    const y = (k / (segmentsPerString - 1)) * height;
+                    // Base gaussian hump so strings cluster near mid
+                    const taper = Math.exp(-Math.pow(y - midY, 2) / (2 * sigmaY * sigmaY));
+                    const baseX = centerX + lateralOffset * 0.5 * taper;
+                    points.push({ x: baseX, y, baseX, baseY: y });
+                }
+                strings.push({ bundleIndex: b, amp, freq, phase, colorType, points });
+            }
+        }
+    }
+
+    function palette() {
+        const bg = getComputedCSSVar('--background') || '#F5F3E7';
+        const accent = getComputedCSSVar('--azul-royal') || '#CB1B45';
+        const muted = getComputedCSSVar('--muted-foreground') || '#64748b';
+        return { bg, accent, muted };
+    }
+
+    function animate() {
+        const { accent, muted } = palette();
+        const width = canvas.width / dpr;
+        const height = canvas.height / dpr;
+        ctx.clearRect(0, 0, width, height);
+
+        // Motion parameters
+        const baseSpeed = prefersReduced ? 0.0 : 0.0028;
+        const travel = time * 0.0016;
+        const stiffness = prefersReduced ? 0.08 : 0.14; // smoothing toward targets
+        const mouseRadius = 140;
+        const sigma = mouseRadius * 0.55;
+
+        // Update strings
+        for (let str of strings) {
+            const bundle = bundles[str.bundleIndex];
+            const centerDrift = Math.sin(travel + bundle.phase) * 10; // subtle bundle drift
+            const centerX = bundle.centerX + centerDrift;
+
+            // Choose style
+            const isAccent = str.colorType === 'accent';
+            ctx.lineWidth = isAccent ? 1.0 : 0.8;
+            ctx.globalAlpha = isAccent ? 0.12 : 0.08;
+            ctx.strokeStyle = isAccent ? accent : muted;
+
+            ctx.beginPath();
+            for (let i = 0; i < str.points.length; i++) {
+                const p = str.points[i];
+                const y = p.baseY;
+
+                // Traveling wave along the string with vertical taper
+                const taper = 0.35 + 0.65 * Math.sin(Math.PI * (y / height)); // thinner at ends
+                const wave = Math.sin(y * str.freq + str.phase + travel * 2.0);
+                const targetX = centerX + (p.baseX - bundle.centerX) + wave * str.amp * taper;
+
+                // Mouse repulsion with Gaussian falloff
+                let repulseX = 0;
+                let repulseY = 0;
+                const dx = p.x - mousePosition.x;
+                const dy = p.y - mousePosition.y;
+                const dist2 = dx * dx + dy * dy;
+                if (dist2 < mouseRadius * mouseRadius) {
+                    const dist = Math.max(1, Math.sqrt(dist2));
+                    const falloff = Math.exp(-(dist * dist) / (2 * sigma * sigma));
+                    const strength = 22 * falloff; // subtle push
+                    repulseX = (dx / dist) * strength;
+                    repulseY = (dy / dist) * strength * 0.25; // smaller vertical influence
+                }
+
+                // Ease toward target with repulsion applied
+                p.x += ((targetX + repulseX) - p.x) * stiffness;
+                p.y += ((y + repulseY) - p.y) * (stiffness * 0.6);
+
+                if (i === 0) {
+                    ctx.moveTo(p.x, p.y);
+                } else {
+                    ctx.lineTo(p.x, p.y);
+                }
+            }
+            ctx.stroke();
+        }
+
+        ctx.globalAlpha = 1;
+        time += baseSpeed * 1000;
+        if (shouldLoop) {
+            animationFrameId = requestAnimationFrame(animate);
+        }
+    }
+
+    function start() {
+        cancel();
+        resize();
+        if (!prefersReduced) {
+            animationFrameId = requestAnimationFrame(animate);
+        } else {
+            // Draw static frame for reduced motion
+            animate();
+            cancel();
+        }
+    }
+
+    function cancel() {
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+
+    // React to theme changes by redrawing with new palette
+    const observer = new MutationObserver(() => {
+        // slight debounce via rAF
+        if (!shouldLoop) animate();
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+    window.addEventListener('resize', debounce(() => {
+        resize();
+    }, 150));
+
+    // Mouse interaction
+    window.addEventListener('mousemove', function(e) {
+        mousePosition.x = e.clientX;
+        mousePosition.y = e.clientY;
+        if (!shouldLoop) {
+            // For reduced motion, draw on interaction only
+            requestAnimationFrame(animate);
+        }
+    }, { passive: true });
+
+    start();
+}
